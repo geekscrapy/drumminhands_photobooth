@@ -8,7 +8,7 @@ import time
 import traceback
 from time import sleep
 import RPi.GPIO as GPIO
-#import picamera # http://picamera.readthedocs.org/en/release-1.4/install2.html
+import picamera # http://picamera.readthedocs.org/en/release-1.4/install2.html
 import atexit
 import sys
 import socket
@@ -21,8 +21,8 @@ from signal import alarm, signal, SIGALRM, SIGKILL
 ########################
 ### Variables Config ###
 ########################
-#led_pin = 7 # LED 
-btn_pin = 13 # pin for the start button
+led_pin = 7 # LED 
+btn_pin = 18 # pin for the start button
 
 total_pics = 4 # number of pics to be taken
 capture_delay = 1 # delay between pics
