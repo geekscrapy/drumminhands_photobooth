@@ -5,9 +5,12 @@
 
 # MOD #####
 import gphoto2cffi as gphoto
-def capture_save(camera, filename):
+def capture_save(camera, filename, preview=False):
 
-	imgdata = camera.capture()
+	if preview:
+		imgdata = camera.get_preview()
+	else:
+		imgdata = camera.capture(to_camera_storage=False)
 
 	with open(filename, "wb") as fp:
 		for chunk in imgdata:
@@ -192,7 +195,7 @@ def start_photobooth():
 	
 	print "Get Ready"
 	GPIO.output(led_pin,False);
-	show_image(real_path + "/instructions.png")
+	#show_image(real_path + "/instructions.png")
 	sleep(prep_delay)
 	
 	# clear the screen
@@ -238,6 +241,17 @@ def start_photobooth():
 				#camera.hflip = False # flip back when taking photo
 				#camera.capture(filename)
 
+
+
+				show_image(real_path + "/instructions.png")
+				time.sleep(capture_delay) # pause in-between shots
+
+				for s in list(reversed(range(1,total_pics+1))):
+					show_image(real_path + "/pose" + str(s) + ".png")
+					time.sleep(s*0.25)
+
+
+
 				gcamera.capture_save(camera, filename)
 				show_image(filename)
 				time.sleep(capture_delay) # pause in-between shots
@@ -245,8 +259,8 @@ def start_photobooth():
 				print(filename)
 				GPIO.output(led_pin,False) #turn off the LED
 				#camera.stop_preview()
-				show_image(real_path + "/pose" + str(i) + ".png")
-				time.sleep(capture_delay) # pause in-between shots
+				#show_image(real_path + "/pose" + str(i) + ".png")
+				#time.sleep(capture_delay) # pause in-between shots
 				clear_screen()
 				if i == total_pics+1:
 					break
