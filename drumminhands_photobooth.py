@@ -5,6 +5,7 @@
 
 # MOD #####
 import gphoto2cffi as gphoto
+
 def capture_save(camera, filename, preview=False):
 
 	if preview:
@@ -148,7 +149,7 @@ def set_demensions(img_w, img_h):
 		transform_y = config.monitor_h
 		offset_y = offset_x = 0
 
-	# uncomment these lines to troubleshoot screen ratios
+# uncomment these lines to troubleshoot screen ratios
 #     print str(img_w) + " x " + str(img_h)
 #     print "ratio_h: "+ str(ratio_h)
 #     print "transform_x: "+ str(transform_x)
@@ -185,14 +186,14 @@ def display_pics(jpg_group):
 		for i in range(1, total_pics+1): #show each pic
 			show_image(config.file_path + jpg_group + "-0" + str(i) + ".jpg")
 			time.sleep(replay_delay) # pause 
-				
+
 # define the photo taking function for when the big button is pressed 
 def start_photobooth(): 
 
 	input(pygame.event.get()) # press escape to exit pygame. Then press ctrl-c to exit python.
 
 	################################# Begin Step 1 #################################
-	
+
 	print "Get Ready"
 	GPIO.output(led_pin,False);
 	#show_image(real_path + "/instructions.png")
@@ -206,17 +207,17 @@ def start_photobooth():
 
 
 
-	
+
 	#camera = picamera.PiCamera()
 	#camera.vflip = False
 	#camera.hflip = True # flip for preview, showing users a mirror image
 
 	#camera.saturation = -100 # comment out this line if you want color images
 	#camera.iso = config.camera_iso
-	
+
 	# pixel_width = 0 # local variable declaration
 	# pixel_height = 0 # local variable declaration
-	
+
 	# if config.hi_res_pics:
 	# 	camera.resolution = (high_res_w, high_res_h) # set camera resolution to high res
 	# else:
@@ -225,11 +226,13 @@ def start_photobooth():
 	# 	camera.resolution = (pixel_width, pixel_height) # set camera resolution to low res
 		
 	################################# Begin Step 2 #################################
-	
+
 	print "Taking pics"
-	
+
 	now = time.strftime("%Y-%m-%d-%H-%M-%S") #get the current date and time for the start of the filename
-	
+
+	success = False
+
 	if config.capture_count_pics:
 		try: # take the photos
 			for i in range(1,total_pics+1):
@@ -257,22 +260,30 @@ def start_photobooth():
 				time.sleep(capture_delay) # pause in-between shots
 
 				print(filename)
-				GPIO.output(led_pin,False) #turn off the LED
+				GPIO.output(led_pin, False) #turn off the LED
 				#camera.stop_preview()
 				#show_image(real_path + "/pose" + str(i) + ".png")
 				#time.sleep(capture_delay) # pause in-between shots
 				clear_screen()
 				if i == total_pics+1:
 					break
-		
+				success = True
+		finally:
+			print "Error taking the photo"
+
+	if success == False:
+		print "Error taking photos, trying loop again!"
+		return None
+
+
 	########################### Begin Step 3 #################################
 
 	input(pygame.event.get()) # press escape to exit pygame. Then press ctrl-c to exit python.
-	
+
 	print "Creating an animated gif" 
-	
+
 	show_image(real_path + "/processing.png")
-	
+
 	if config.make_gifs: # make the gifs
 		if config.hi_res_pics:
 			# first make a small version of each image. Tumblr's max animated gif's are 500 pixels wide.
@@ -286,7 +297,7 @@ def start_photobooth():
 			# make an animated gif with the low resolution images
 			graphicsmagick = "gm convert -delay " + str(gif_delay) + " " + config.file_path + now + "*.jpg " + config.file_path + now + ".gif" 
 			os.system(graphicsmagick) #make the .gif			
-	
+
 
 	# SHOW THE GIF!
 	show_image(config.file_path + now + ".gif")
@@ -294,20 +305,20 @@ def start_photobooth():
 	###############
 
 	########################### Begin Step 4 #################################
-	
+
 	input(pygame.event.get()) # press escape to exit pygame. Then press ctrl-c to exit python.
-	
+
 	try:
 		display_pics(now)
 	except Exception, e:
 		tb = sys.exc_info()[2]
 		traceback.print_exception(e.__class__, e, tb)
 		pygame.quit()
-		
+
 	print "Done"
 
 	show_image(real_path + "/finished2.png")
-	
+
 	time.sleep(restart_delay)
 	show_image(real_path + "/intro.png");
 	GPIO.output(led_pin,True) #turn on the LED
