@@ -2,19 +2,32 @@
 # created by chris@drumminhands.com
 # see instructions at http://www.drumminhands.com/2014/06/15/raspberry-pi-photo-booth/
 
+
+# MOD #####
+import gphoto2cffi as gphoto
+def capture_save(camera, filename):
+
+	imgdata = camera.capture()
+
+	with open(filename, "wb") as fp:
+		for chunk in imgdata:
+			fp.write(chunk)
+###########
+
+
+
+
+
 import os
 import glob
 import time
 import traceback
 from time import sleep
 import RPi.GPIO as GPIO
-import picamera # http://picamera.readthedocs.org/en/release-1.4/install2.html
 import atexit
 import sys
-import socket
 import pygame
 from pygame.locals import QUIT, KEYDOWN, K_ESCAPE
-import pytumblr # https://github.com/tumblr/pytumblr
 import config # this is the config python file config.py
 from signal import alarm, signal, SIGALRM, SIGKILL
 
@@ -53,13 +66,6 @@ replay_cycles = 2 # how many times to show each photo on-screen after taking
 ####################
 real_path = os.path.dirname(os.path.realpath(__file__))
 
-# Setup the tumblr OAuth Client
-client = pytumblr.TumblrRestClient(
-    config.consumer_key,
-    config.consumer_secret,
-    config.oath_token,
-    config.oath_secret,
-)
 
 # GPIO setup
 GPIO.setmode(GPIO.BOARD)
@@ -105,19 +111,7 @@ def clear_pics(channel):
 		sleep(0.25)
 		GPIO.output(led_pin,False);
 		sleep(0.25)
-
-# check if connected to the internet   
-def is_connected():
-  try: 
-    # see if we can resolve the host name -- tells us if there is a DNS listening  
-    host = socket.gethostbyname(test_server)
-    # connect to the host -- tells us if the host is actually
-    # reachable
-    s = socket.create_connection((host, 80), 2)
-    return True
-  except:
-     pass
-  return False    
+  
 
 # set variables to properly display the image on screen at right ratio
 def set_demensions(img_w, img_h):
@@ -203,22 +197,29 @@ def start_photobooth():
 	
 	# clear the screen
 	clear_screen()
+
+
+	camera = gphoto.Camera()
+
+
+
 	
-	camera = picamera.PiCamera()  
-	camera.vflip = False
-	camera.hflip = True # flip for preview, showing users a mirror image
-	camera.saturation = -100 # comment out this line if you want color images
-	camera.iso = config.camera_iso
+	#camera = picamera.PiCamera()
+	#camera.vflip = False
+	#camera.hflip = True # flip for preview, showing users a mirror image
+
+	#camera.saturation = -100 # comment out this line if you want color images
+	#camera.iso = config.camera_iso
 	
-	pixel_width = 0 # local variable declaration
-	pixel_height = 0 # local variable declaration
+	# pixel_width = 0 # local variable declaration
+	# pixel_height = 0 # local variable declaration
 	
-	if config.hi_res_pics:
-		camera.resolution = (high_res_w, high_res_h) # set camera resolution to high res
-	else:
-		pixel_width = 500 # maximum width of animated gif on tumblr
-		pixel_height = config.monitor_h * pixel_width // config.monitor_w
-		camera.resolution = (pixel_width, pixel_height) # set camera resolution to low res
+	# if config.hi_res_pics:
+	# 	camera.resolution = (high_res_w, high_res_h) # set camera resolution to high res
+	# else:
+	# 	pixel_width = 500 # maximum width of animated gif on tumblr
+	# 	pixel_height = config.monitor_h * pixel_width // config.monitor_w
+	# 	camera.resolution = (pixel_width, pixel_height) # set camera resolution to low res
 		
 	################################# Begin Step 2 #################################
 	
@@ -229,38 +230,26 @@ def start_photobooth():
 	if config.capture_count_pics:
 		try: # take the photos
 			for i in range(1,total_pics+1):
-				camera.hflip = True # preview a mirror image
-				camera.start_preview(resolution=(config.monitor_w, config.monitor_h)) # start preview at low res but the right ratio
+				#camera.hflip = True # preview a mirror image
+				#camera.start_preview(resolution=(config.monitor_w, config.monitor_h)) # start preview at low res but the right ratio
 				time.sleep(2) #warm up camera
 				GPIO.output(led_pin,True) #turn on the LED
 				filename = config.file_path + now + '-0' + str(i) + '.jpg'
-				camera.hflip = False # flip back when taking photo
-				camera.capture(filename)
+				#camera.hflip = False # flip back when taking photo
+				#camera.capture(filename)
+
+				gcamera.capture_save(camera, filename)
+				show_image(filename)
+				time.sleep(capture_delay) # pause in-between shots
+
 				print(filename)
 				GPIO.output(led_pin,False) #turn off the LED
-				camera.stop_preview()
+				#camera.stop_preview()
 				show_image(real_path + "/pose" + str(i) + ".png")
 				time.sleep(capture_delay) # pause in-between shots
 				clear_screen()
 				if i == total_pics+1:
 					break
-		finally:
-			camera.close()
-	else:
-		camera.start_preview(resolution=(config.monitor_w, config.monitor_h)) # start preview at low res but the right ratio
-		time.sleep(2) #warm up camera
-		
-		try: #take the photos
-			for i, filename in enumerate(camera.capture_continuous(config.file_path + now + '-' + '{counter:02d}.jpg')):
-				GPIO.output(led_pin,True) #turn on the LED
-				print(filename)
-				time.sleep(capture_delay) # pause in-between shots
-				GPIO.output(led_pin,False) #turn off the LED
-				if i == total_pics-1:
-					break
-		finally:
-			camera.stop_preview()
-			camera.close()
 		
 	########################### Begin Step 3 #################################
 	
@@ -268,10 +257,7 @@ def start_photobooth():
 	
 	print "Creating an animated gif" 
 	
-	if config.post_online:
-		show_image(real_path + "/uploading.png")
-	else:
-		show_image(real_path + "/processing.png")
+	show_image(real_path + "/processing.png")
 	
 	if config.make_gifs: # make the gifs
 		if config.hi_res_pics:
@@ -285,45 +271,14 @@ def start_photobooth():
 		else:
 			# make an animated gif with the low resolution images
 			graphicsmagick = "gm convert -delay " + str(gif_delay) + " " + config.file_path + now + "*.jpg " + config.file_path + now + ".gif" 
-			os.system(graphicsmagick) #make the .gif
-
-	if config.post_online: # turn off posting pics online in config.py
-		connected = is_connected() #check to see if you have an internet connection
-
-		if (connected==False):
-			print "bad internet connection"
-                    
-		while connected:
-			if config.make_gifs: 
-				try:
-					file_to_upload = config.file_path + now + ".gif"
-					client.create_photo(config.tumblr_blog, state="published", tags=[config.tagsForTumblr], data=file_to_upload)
-					break
-				except ValueError:
-					print "Oops. No internect connection. Upload later."
-					try: #make a text file as a note to upload the .gif later
-						file = open(config.file_path + now + "-FILENOTUPLOADED.txt",'w')   # Trying to create a new file or open one
-						file.close()
-					except:
-						print('Something went wrong. Could not write file.')
-						sys.exit(0) # quit Python
-			else: # upload jpgs instead
-				try:
-					# create an array and populate with file paths to our jpgs
-					myJpgs=[0 for i in range(4)]
-					for i in range(4):
-						myJpgs[i]=config.file_path + now + "-0" + str(i+1) + ".jpg"
-					client.create_photo(config.tumblr_blog, state="published", tags=[config.tagsForTumblr], format="markdown", data=myJpgs)
-					break
-				except ValueError:
-					print "Oops. No internect connection. Upload later."
-					try: #make a text file as a note to upload the .gif later
-						file = open(config.file_path + now + "-FILENOTUPLOADED.txt",'w')   # Trying to create a new file or open one
-						file.close()
-					except:
-						print('Something went wrong. Could not write file.')
-						sys.exit(0) # quit Python				
+			os.system(graphicsmagick) #make the .gif			
 	
+
+	# SHOW THE GIF!
+	show_image(config.file_path + now + ".gif")
+	time.sleep(capture_delay) # pause in-between shots
+	###############
+
 	########################### Begin Step 4 #################################
 	
 	input(pygame.event.get()) # press escape to exit pygame. Then press ctrl-c to exit python.
@@ -336,11 +291,8 @@ def start_photobooth():
 		pygame.quit()
 		
 	print "Done"
-	
-	if config.post_online:
-		show_image(real_path + "/finished.png")
-	else:
-		show_image(real_path + "/finished2.png")
+
+	show_image(real_path + "/finished2.png")
 	
 	time.sleep(restart_delay)
 	show_image(real_path + "/intro.png");
