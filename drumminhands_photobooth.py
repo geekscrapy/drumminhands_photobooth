@@ -90,18 +90,18 @@ pygame.display.toggle_fullscreen()
 
 # clean up running programs as needed when main program exits
 def cleanup():
-  print('Ended abruptly')
-  pygame.quit()
-  GPIO.cleanup()
+	print('Ended abruptly')
+	pygame.quit()
+	GPIO.cleanup()
 atexit.register(cleanup)
 
 # A function to handle keyboard/mouse/device input events    
 def input(events):
-    for event in events:  # Hit the ESC key to quit the slideshow.
-        if (event.type == QUIT or
-            (event.type == KEYDOWN and event.key == K_ESCAPE)):
-            pygame.quit()
-                
+	for event in events:  # Hit the ESC key to quit the slideshow.
+		if (event.type == QUIT or
+			(event.type == KEYDOWN and event.key == K_ESCAPE)):
+			pygame.quit()
+				
 #delete files in folder
 def clear_pics(channel):
 	files = glob.glob(config.file_path + '*')
@@ -114,41 +114,41 @@ def clear_pics(channel):
 		sleep(0.25)
 		GPIO.output(led_pin,False);
 		sleep(0.25)
-  
+
 
 # set variables to properly display the image on screen at right ratio
 def set_demensions(img_w, img_h):
 	# Note this only works when in booting in desktop mode. 
 	# When running in terminal, the size is not correct (it displays small). Why?
 
-    # connect to global vars
-    global transform_y, transform_x, offset_y, offset_x
+	# connect to global vars
+	global transform_y, transform_x, offset_y, offset_x
 
-    # based on output screen resolution, calculate how to display
-    ratio_h = (config.monitor_w * img_h) / img_w 
+	# based on output screen resolution, calculate how to display
+	ratio_h = (config.monitor_w * img_h) / img_w 
 
-    if (ratio_h < config.monitor_h):
-        #Use horizontal black bars
-        #print "horizontal black bars"
-        transform_y = ratio_h
-        transform_x = config.monitor_w
-        offset_y = (config.monitor_h - ratio_h) / 2
-        offset_x = 0
-    elif (ratio_h > config.monitor_h):
-        #Use vertical black bars
-        #print "vertical black bars"
-        transform_x = (config.monitor_h * img_w) / img_h
-        transform_y = config.monitor_h
-        offset_x = (config.monitor_w - transform_x) / 2
-        offset_y = 0
-    else:
-        #No need for black bars as photo ratio equals screen ratio
-        #print "no black bars"
-        transform_x = config.monitor_w
-        transform_y = config.monitor_h
-        offset_y = offset_x = 0
+	if (ratio_h < config.monitor_h):
+		#Use horizontal black bars
+		#print "horizontal black bars"
+		transform_y = ratio_h
+		transform_x = config.monitor_w
+		offset_y = (config.monitor_h - ratio_h) / 2
+		offset_x = 0
+	elif (ratio_h > config.monitor_h):
+		#Use vertical black bars
+		#print "vertical black bars"
+		transform_x = (config.monitor_h * img_w) / img_h
+		transform_y = config.monitor_h
+		offset_x = (config.monitor_w - transform_x) / 2
+		offset_y = 0
+	else:
+		#No need for black bars as photo ratio equals screen ratio
+		#print "no black bars"
+		transform_x = config.monitor_w
+		transform_y = config.monitor_h
+		offset_y = offset_x = 0
 
-    # uncomment these lines to troubleshoot screen ratios
+	# uncomment these lines to troubleshoot screen ratios
 #     print str(img_w) + " x " + str(img_h)
 #     print "ratio_h: "+ str(ratio_h)
 #     print "transform_x: "+ str(transform_x)
@@ -181,7 +181,7 @@ def clear_screen():
 
 # display a group of images
 def display_pics(jpg_group):
-    for i in range(0, replay_cycles): #show pics a few times
+	for i in range(0, replay_cycles): #show pics a few times
 		for i in range(1, total_pics+1): #show each pic
 			show_image(config.file_path + jpg_group + "-0" + str(i) + ".jpg")
 			time.sleep(replay_delay) # pause 
@@ -266,7 +266,7 @@ def start_photobooth():
 					break
 		
 	########################### Begin Step 3 #################################
-	
+
 	input(pygame.event.get()) # press escape to exit pygame. Then press ctrl-c to exit python.
 	
 	print "Creating an animated gif" 
