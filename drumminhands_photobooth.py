@@ -12,7 +12,8 @@ myLED = LED(10)
 
 def capture_save(filename, preview=False):
 
-	import numpy, Image
+	from PIL import Image
+	import numpy
 
 	for n in xrange(10):
 		a = numpy.random.rand(30,30,3) * 255
