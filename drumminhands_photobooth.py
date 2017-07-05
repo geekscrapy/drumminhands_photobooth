@@ -4,18 +4,25 @@
 
 
 # MOD #####
-import gphoto2cffi as gphoto
-
+from subprocess import call
 def capture_save(camera, filename, preview=False):
 
-	if preview:
-		imgdata = camera.get_preview()
-	else:
-		imgdata = camera.capture(to_camera_storage=False)
+	try:
 
-	with open(filename, "wb") as fp:
-		for chunk in imgdata:
-			fp.write(chunk)
+		if preview:
+			ret = call(["gphoto2","--capture-image-and-download","--filename", "\""+filename+"\""])
+		else:
+			ret = call(["gphoto2","--capture-preview","--filename", "\""+filename+"\""])
+
+	except Exception as e:
+		return False
+
+	if ret != 0:
+		return False
+
+	return True
+
+
 ###########
 
 
@@ -203,9 +210,6 @@ def start_photobooth():
 	clear_screen()
 
 
-	camera = gphoto.Camera()
-
-
 
 
 	#camera = picamera.PiCamera()
@@ -255,7 +259,8 @@ def start_photobooth():
 
 
 
-				gcamera.capture_save(camera, filename)
+				capture_save(camera, filename)
+
 				show_image(filename)
 				time.sleep(capture_delay) # pause in-between shots
 
