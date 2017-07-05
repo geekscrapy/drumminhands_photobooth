@@ -279,8 +279,9 @@ def start_photobooth():
 					time.sleep(s*0.15)
 
 
-
+				show_image(real_path + "/processing.png")
 				capture_save(filename)
+
 
 				show_image(filename)
 				time.sleep(capture_delay) # pause in-between shots
