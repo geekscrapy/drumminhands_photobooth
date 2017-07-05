@@ -302,18 +302,10 @@ def start_photobooth():
 				#clear_screen()
 
 				if i == total_pics+1:
-					success = True
 					break
-
-		except Exception as e:
-			print str(e)
 
 		finally:
 			print "Error taking the photo"
-
-	if success == False:
-		print "Error taking photos, trying loop again!"
-		return None
 
 
 	########################### Begin Step 3 #################################
