@@ -16,7 +16,7 @@ def capture_save(filename, preview=False):
 	import numpy
 
 	for n in xrange(10):
-		a = numpy.random.rand(30,30,3) * 255
+		a = numpy.random.rand(300,300,3) * 255
 		im_out = Image.fromarray(a.astype('uint8')).convert('RGBA')
 		im_out.save(filename)
 
@@ -226,12 +226,9 @@ def start_photobooth():
 	myLED.off()
 	#GPIO.output(led_pin,False);
 	#show_image(real_path + "/instructions.png")
+	show_image(real_path + "/instructions.png")
 	sleep(prep_delay)
 	
-	# clear the screen
-	clear_screen()
-	show_image(real_path + "/instructions.png")
-
 
 
 
@@ -272,9 +269,9 @@ def start_photobooth():
 				#camera.hflip = False # flip back when taking photo
 				#camera.capture(filename)
 
+				if i != 1:
+					show_image(real_path + "/instructions.png")
 
-
-				show_image(real_path + "/instructions.png")
 				time.sleep(capture_delay) # pause in-between shots
 
 				for s in list(reversed(range(1,total_pics+1))):
