@@ -39,7 +39,7 @@ import glob
 import time
 import traceback
 from time import sleep
-import RPi.GPIO as GPIO
+#import RPi.GPIO as GPIO
 import atexit
 import sys
 import pygame
@@ -84,11 +84,11 @@ replay_cycles = 2 # how many times to show each photo on-screen after taking
 real_path = os.path.dirname(os.path.realpath(__file__))
 
 
-# GPIO setup
-GPIO.setmode(GPIO.BOARD)
-GPIO.setup(led_pin,GPIO.OUT) # LED
-#GPIO.setup(btn_pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-GPIO.output(led_pin,False) #for some reason the pin turns on at the beginning of the program. Why?
+# # GPIO setup
+# GPIO.setmode(GPIO.BOARD)
+# GPIO.setup(led_pin,GPIO.OUT) # LED
+# #GPIO.setup(btn_pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+# GPIO.output(led_pin,False) #for some reason the pin turns on at the beginning of the program. Why?
 
 # initialize pygame
 pygame.init()
@@ -106,7 +106,7 @@ pygame.display.toggle_fullscreen()
 def cleanup():
 	print('Ended abruptly')
 	pygame.quit()
-	GPIO.cleanup()
+	#GPIO.cleanup()
 atexit.register(cleanup)
 
 # A function to handle keyboard/mouse/device input events    
@@ -124,9 +124,11 @@ def clear_pics(channel):
 	#light the lights in series to show completed
 	print "Deleted previous pics"
 	for x in range(0, 3): #blink light
-		GPIO.output(led_pin,True); 
+		myLED.on()
+		#GPIO.output(led_pin,True); 
 		sleep(0.25)
-		GPIO.output(led_pin,False);
+		myLED.off()
+		#GPIO.output(led_pin,False);
 		sleep(0.25)
 
 
@@ -208,7 +210,8 @@ def start_photobooth():
 	################################# Begin Step 1 #################################
 
 	print "Get Ready"
-	GPIO.output(led_pin,False);
+	myLED.off()
+	#GPIO.output(led_pin,False);
 	#show_image(real_path + "/instructions.png")
 	sleep(prep_delay)
 	
@@ -249,7 +252,8 @@ def start_photobooth():
 				#camera.hflip = True # preview a mirror image
 				#camera.start_preview(resolution=(config.monitor_w, config.monitor_h)) # start preview at low res but the right ratio
 				time.sleep(2) #warm up camera
-				GPIO.output(led_pin,True) #turn on the LED
+				myLED.on()
+				#GPIO.output(led_pin,True) #turn on the LED
 				filename = config.file_path + now + '-0' + str(i) + '.jpg'
 				#camera.hflip = False # flip back when taking photo
 				#camera.capture(filename)
@@ -271,7 +275,8 @@ def start_photobooth():
 				time.sleep(capture_delay) # pause in-between shots
 
 				print(filename)
-				GPIO.output(led_pin, False) #turn off the LED
+				myLED.off()
+				#GPIO.output(led_pin, False) #turn off the LED
 				#camera.stop_preview()
 				#show_image(real_path + "/pose" + str(i) + ".png")
 				#time.sleep(capture_delay) # pause in-between shots
@@ -332,7 +337,8 @@ def start_photobooth():
 
 	time.sleep(restart_delay)
 	show_image(real_path + "/intro.png");
-	GPIO.output(led_pin,True) #turn on the LED
+	myLED.on()
+	#GPIO.output(led_pin,True) #turn on the LED
 
 ####################
 ### Main Program ###
@@ -344,9 +350,11 @@ if config.clear_on_startup:
 
 print "Photo booth app running..." 
 for x in range(0, 5): #blink light to show the app is running
-	GPIO.output(led_pin,True)
+	myLED.on()
+	#GPIO.output(led_pin,True)
 	sleep(0.25)
-	GPIO.output(led_pin,False)
+	myLED.off()
+	#GPIO.output(led_pin,False)
 	sleep(0.25)
 
 show_image(real_path + "/intro.png");
@@ -354,7 +362,8 @@ show_image(real_path + "/intro.png");
 print 'Image shown...'
 
 while True:
-	GPIO.output(led_pin,True); #turn on the light showing users they can push the button
+	myLED.on()
+	#GPIO.output(led_pin,True); #turn on the light showing users they can push the button
 	#input(pygame.event.get()) # press escape to exit pygame. Then press ctrl-c to exit python.
 
 	mybutt.wait_for_press()
