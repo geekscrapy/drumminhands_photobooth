@@ -10,7 +10,19 @@ from gpiozero import Button, LED
 mybutt = Button(7)
 myLED = LED(10)
 
-def capture_save(camera, filename, preview=False):
+def capture_save(filename, preview=False):
+
+	import numpy, Image
+
+	for n in xrange(10):
+		a = numpy.random.rand(30,30,3) * 255
+		im_out = Image.fromarray(a.astype('uint8')).convert('RGBA')
+		im_out.save(filename)
+
+	return True
+
+
+
 
 	try:
 
