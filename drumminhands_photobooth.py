@@ -6,8 +6,9 @@
 # MOD #####
 from subprocess import call
 
-from gpiozero import Button
+from gpiozero import Button, LED
 mybutt = Button(7)
+myLED = LED(10)
 
 def capture_save(camera, filename, preview=False):
 
@@ -202,7 +203,7 @@ def display_pics(jpg_group):
 # define the photo taking function for when the big button is pressed 
 def start_photobooth(): 
 
-	input(pygame.event.get()) # press escape to exit pygame. Then press ctrl-c to exit python.
+	#input(pygame.event.get()) # press escape to exit pygame. Then press ctrl-c to exit python.
 
 	################################# Begin Step 1 #################################
 
@@ -288,7 +289,7 @@ def start_photobooth():
 
 	########################### Begin Step 3 #################################
 
-	input(pygame.event.get()) # press escape to exit pygame. Then press ctrl-c to exit python.
+	#input(pygame.event.get()) # press escape to exit pygame. Then press ctrl-c to exit python.
 
 	print "Creating an animated gif" 
 
@@ -316,7 +317,7 @@ def start_photobooth():
 
 	########################### Begin Step 4 #################################
 
-	input(pygame.event.get()) # press escape to exit pygame. Then press ctrl-c to exit python.
+	#input(pygame.event.get()) # press escape to exit pygame. Then press ctrl-c to exit python.
 
 	try:
 		display_pics(now)
