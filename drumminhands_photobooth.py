@@ -269,7 +269,7 @@ def start_photobooth():
 
 
 
-				capture_save(camera, filename)
+				capture_save(filename)
 
 				show_image(filename)
 				time.sleep(capture_delay) # pause in-between shots
