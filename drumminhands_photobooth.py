@@ -5,6 +5,10 @@
 
 # MOD #####
 from subprocess import call
+
+from gpiozero import Button
+mybutt = Button(7)
+
 def capture_save(camera, filename, preview=False):
 
 	try:
@@ -45,8 +49,9 @@ from signal import alarm, signal, SIGALRM, SIGKILL
 ########################
 ### Variables Config ###
 ########################
-led_pin = 7 # LED 
-btn_pin = 21 # pin for the start button
+# https://www.raspberrypi.org/documentation/usage/gpio/
+led_pin = 10 # LED 
+#btn_pin = 7 # pin for the start button
 
 total_pics = 4 # number of pics to be taken
 capture_delay = 1 # delay between pics
@@ -81,7 +86,7 @@ real_path = os.path.dirname(os.path.realpath(__file__))
 # GPIO setup
 GPIO.setmode(GPIO.BOARD)
 GPIO.setup(led_pin,GPIO.OUT) # LED
-GPIO.setup(btn_pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+#GPIO.setup(btn_pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.output(led_pin,False) #for some reason the pin turns on at the beginning of the program. Why?
 
 # initialize pygame
@@ -349,7 +354,11 @@ print 'Image shown...'
 
 while True:
 	GPIO.output(led_pin,True); #turn on the light showing users they can push the button
-	input(pygame.event.get()) # press escape to exit pygame. Then press ctrl-c to exit python.
-	GPIO.wait_for_edge(btn_pin, GPIO.FALLING)
+	#input(pygame.event.get()) # press escape to exit pygame. Then press ctrl-c to exit python.
+
+	mybutt.wait_for_press()
+
+	#GPIO.wait_for_edge(btn_pin, GPIO.FALLING)
 	time.sleep(config.debounce) #debounce
+
 	start_photobooth()
