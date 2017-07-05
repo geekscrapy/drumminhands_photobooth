@@ -345,6 +345,8 @@ for x in range(0, 5): #blink light to show the app is running
 
 show_image(real_path + "/intro.png");
 
+print 'Image shown...'
+
 while True:
 	GPIO.output(led_pin,True); #turn on the light showing users they can push the button
 	input(pygame.event.get()) # press escape to exit pygame. Then press ctrl-c to exit python.
