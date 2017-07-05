@@ -68,7 +68,7 @@ led_pin = 10 # LED
 #btn_pin = 7 # pin for the start button
 
 total_pics = 4 # number of pics to be taken
-capture_delay = 1 # delay between pics
+capture_delay = 2 # delay between pics
 prep_delay = 5 # number of seconds at step 1 as users prep to have photo taken
 gif_delay = 100 # How much time between frames in the animated gif
 restart_delay = 10 # how long to display finished message before beginning a new session
@@ -230,6 +230,7 @@ def start_photobooth():
 	
 	# clear the screen
 	clear_screen()
+	show_image(real_path + "/instructions.png")
 
 
 
@@ -278,7 +279,7 @@ def start_photobooth():
 
 				for s in list(reversed(range(1,total_pics+1))):
 					show_image(real_path + "/pose" + str(s) + ".png")
-					time.sleep(s*0.25)
+					time.sleep(s*0.15)
 
 
 
@@ -382,6 +383,6 @@ while True:
 	mybutt.wait_for_press()
 
 	#GPIO.wait_for_edge(btn_pin, GPIO.FALLING)
-	time.sleep(config.debounce) #debounce
+	#time.sleep(config.debounce) #debounce
 
 	start_photobooth()
