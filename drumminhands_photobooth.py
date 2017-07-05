@@ -5,10 +5,13 @@
 
 # MOD #####
 from subprocess import call
+from random import randint
 
 from gpiozero import Button, LED
 mybutt = Button(7)
 myLED = LED(10)
+
+amt_smile_pics = 6
 
 def capture_save(filename, preview=False):
 
@@ -16,7 +19,7 @@ def capture_save(filename, preview=False):
 	import numpy
 
 	for n in xrange(10):
-		a = numpy.random.rand(300,300,3) * 255
+		a = numpy.random.rand(10,10,3) * 255
 		im_out = Image.fromarray(a.astype('uint8')).convert('RGBA')
 		im_out.save(filename)
 
@@ -69,9 +72,9 @@ led_pin = 10 # LED
 
 total_pics = 4 # number of pics to be taken
 capture_delay = 2 # delay between pics
-prep_delay = 5 # number of seconds at step 1 as users prep to have photo taken
-gif_delay = 100 # How much time between frames in the animated gif
-restart_delay = 10 # how long to display finished message before beginning a new session
+prep_delay = 7 # number of seconds at step 1 as users prep to have photo taken
+gif_delay = 50 # How much time between frames in the animated gif
+restart_delay = 5 # how long to display finished message before beginning a new session
 test_server = 'www.google.com'
 
 # full frame of v1 camera is 2592x1944. Wide screen max is 2592,1555
@@ -279,7 +282,10 @@ def start_photobooth():
 					time.sleep(s*0.15)
 
 
-				show_image(real_path + "/processing.png")
+				rand_smile = randint(1, amt_smile_pics)
+				show_image(real_path + "/smile/"+rand_smile+".jpg")
+
+
 				capture_save(filename)
 
 
@@ -294,8 +300,8 @@ def start_photobooth():
 				#time.sleep(capture_delay) # pause in-between shots
 				clear_screen()
 				if i == total_pics+1:
+					success = True
 					break
-				success = True
 		finally:
 			print "Error taking the photo"
 
