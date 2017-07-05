@@ -281,7 +281,7 @@ def start_photobooth():
 					show_image(real_path + "/pose" + str(s) + ".png")
 					time.sleep(s*0.15)
 
-
+				# Show a random image to make people smile!
 				rand_smile = str(randint(1, amt_smile_pics))
 				show_image(real_path + "/smile/"+rand_smile+".jpg")
 
@@ -298,10 +298,16 @@ def start_photobooth():
 				#camera.stop_preview()
 				#show_image(real_path + "/pose" + str(i) + ".png")
 				#time.sleep(capture_delay) # pause in-between shots
-				clear_screen()
+
+				#clear_screen()
+
 				if i == total_pics+1:
 					success = True
 					break
+
+		except Exception as e:
+			print str(e)
+
 		finally:
 			print "Error taking the photo"
 
