@@ -282,7 +282,7 @@ def start_photobooth():
 					time.sleep(s*0.15)
 
 
-				rand_smile = randint(1, amt_smile_pics)
+				rand_smile = str(randint(1, amt_smile_pics))
 				show_image(real_path + "/smile/"+rand_smile+".jpg")
 
 
