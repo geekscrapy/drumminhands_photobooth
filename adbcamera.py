@@ -35,7 +35,7 @@ class camera(object):
 			return False
 
 		# Then rename it to what we planned!
-		ret = call('mv '+config.file_path+cap_name config.file_path+filename)
+		ret = call('mv '+config.file_path+cap_name+' '+config.file_path+filename)
 		if ret != 0:
 			return False
 
