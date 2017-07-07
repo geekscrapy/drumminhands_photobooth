@@ -7,46 +7,13 @@
 from subprocess import call
 from random import randint
 
+from adbcamera import camera
+
 from gpiozero import Button, LED
 mybutt = Button(7)
 myLED = LED(10)
 
 amt_smile_pics = 6
-
-def capture_save(filename, preview=False):
-
-	from PIL import Image
-	import numpy
-
-	for n in xrange(10):
-		a = numpy.random.rand(10,10,3) * 255
-		im_out = Image.fromarray(a.astype('uint8')).convert('RGBA')
-		im_out.save(filename)
-
-	return True
-
-
-
-
-	try:
-
-		if preview:
-			ret = call(["gphoto2","--capture-image-and-download","--filename", "\""+filename+"\""])
-		else:
-			ret = call(["gphoto2","--capture-preview","--filename", "\""+filename+"\""])
-
-	except Exception as e:
-		return False
-
-	if ret != 0:
-		return False
-
-	return True
-
-
-###########
-
-
 
 
 
@@ -233,6 +200,9 @@ def start_photobooth():
 	sleep(prep_delay)
 	
 
+	cam = camera()
+	cam.power_toggle()
+
 
 
 	#camera = picamera.PiCamera()
@@ -286,8 +256,8 @@ def start_photobooth():
 				show_image(real_path + "/smile/"+rand_smile+".jpg")
 
 
-				capture_save(filename)
-
+				cam.take()
+				cam.get_pic(filename)
 
 				show_image(filename)
 				time.sleep(capture_delay) # pause in-between shots
@@ -305,7 +275,7 @@ def start_photobooth():
 					break
 
 		finally:
-			print "Error taking the photo"
+			pass
 
 
 	########################### Begin Step 3 #################################
