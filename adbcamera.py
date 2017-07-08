@@ -1,5 +1,7 @@
 # Camera control
 
+import subprocess
+
 import config
 
 class camera(object):
@@ -12,12 +14,12 @@ class camera(object):
 
 
 	def power_toggle(self):
-		ret = call('adb shell "input keyevent KEYCODE_POWER"')
+		ret = subprocess.call('adb shell "input keyevent KEYCODE_POWER"')
 		if ret == 0:
 			self.status = not self.status
 
 	def take(self):
-		return call('adb shell "input keyevent KEYCODE_CAMERA"')
+		return subprocess.call('adb shell "input keyevent KEYCODE_CAMERA"')
 
 	def get_pic(self, filename):
 
@@ -29,13 +31,13 @@ class camera(object):
 			return False
 
 		# Then copy it from the camera
-		ret = call('adb pull /sdcard/DCIM/Camera/'+cap_name+' '+config.file_path)
+		ret = subprocess.call('adb pull /sdcard/DCIM/Camera/'+cap_name+' '+config.file_path)
 
 		if ret != 0:
 			return False
 
 		# Then rename it to what we planned!
-		ret = call('mv '+config.file_path+cap_name+' '+config.file_path+filename)
+		ret = subprocess.call('mv '+config.file_path+cap_name+' '+config.file_path+filename)
 		if ret != 0:
 			return False
 

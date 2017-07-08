@@ -13,9 +13,6 @@ from gpiozero import Button, LED
 mybutt = Button(7)
 myLED = LED(10)
 
-amt_smile_pics = 6
-
-
 
 import os
 import glob
@@ -252,7 +249,7 @@ def start_photobooth():
 					time.sleep(s*0.15)
 
 				# Show a random image to make people smile!
-				rand_smile = str(randint(1, amt_smile_pics))
+				rand_smile = str(randint(1, config.smile_pics))
 				show_image(real_path + "/smile/"+rand_smile+".jpg")
 
 

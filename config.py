@@ -13,3 +13,4 @@ hi_res_pics = True  # True to save high res pics from camera.
                     # Careful, each photo costs against your daily Tumblr upload max.
 camera_iso = 800    # adjust for lighting issues. Normal is 100 or 200. Sort of dark is 400. Dark is 800 max.
                     # available options: 100, 200, 320, 400, 500, 640, 800
+smile_pics = 11
