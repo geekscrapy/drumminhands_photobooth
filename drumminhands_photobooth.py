@@ -179,7 +179,7 @@ def clear_screen():
 def display_pics(jpg_group):
 	for i in range(0, replay_cycles): #show pics a few times
 		for i in range(1, total_pics+1): #show each pic
-			show_image(config.file_path + jpg_group + "-0" + str(i) + ".jpg")
+			show_image(config.file_path + jpg_group + "-0" + str(i) + "-sm.jpg")
 			time.sleep(replay_delay) # pause 
 
 # define the photo taking function for when the big button is pressed 
@@ -258,6 +258,7 @@ def start_photobooth():
 		finally:
 			pass
 
+	cam.power_toggle()
 
 	########################### Begin Step 3 #################################
 
@@ -301,7 +302,6 @@ def start_photobooth():
 	show_image(real_path + "/intro.png");
 	myLED.on()
 
-	cam.power_toggle()
 
 
 ####################
