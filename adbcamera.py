@@ -15,7 +15,6 @@ class camera(object):
 		# Get the starting list of files
 		self.old_files = []
 		dir_list = subprocess.check_output('adb shell ls /sdcard/DCIM/Camera/', shell=True)
-		print dir_list
 		dir_list = dir_list.splitlines()
 
 		for f in dir_list:
@@ -57,12 +56,10 @@ class camera(object):
 		return new_files
 
 
-	def get_pic(self, filename):
+	def download_pic(self, filename):
 
 		# Get the filename of the latest picture
 		new_files = self.get_latest()
-
-
 
 		# Copy all the new files
 		for f in new_files:

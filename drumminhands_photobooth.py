@@ -254,8 +254,9 @@ def start_photobooth():
 
 
 				cam.take()
-				cam.get_pic(filename)
-
+				show_image(real_path + "/processing.png")
+				time.sleep(5)
+				cam.download_pic(filename)
 				show_image(filename)
 				time.sleep(capture_delay) # pause in-between shots
 
