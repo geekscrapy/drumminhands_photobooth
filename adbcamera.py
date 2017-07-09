@@ -30,7 +30,6 @@ class camera(object):
 		print 'adb taking photo'
 		subprocess.call('adb shell "input keyevent KEYCODE_CAMERA"', shell=True)
 		self.check_take()
-		time.sleep(0.5)
 
 
 	# Wait for the photo to be saved before moving on
@@ -38,7 +37,7 @@ class camera(object):
 
 		i = 0
 		while not len(self.get_new()) > 0:
-			if i > 5:
+			if i > 7:
 				return
 			i += 1
 			print 'Waiting for save...'

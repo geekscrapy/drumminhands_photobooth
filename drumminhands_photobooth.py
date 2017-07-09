@@ -54,7 +54,7 @@ transform_x = config.monitor_w # how wide to scale the jpg when replaying
 transfrom_y = config.monitor_h # how high to scale the jpg when replaying
 offset_x = 0 # how far off to left corner to display photos
 offset_y = 0 # how far off to left corner to display photos
-replay_delay = 0.50 # how much to wait in-between showing pics on-screen after taking
+replay_delay = 0.25 # how much to wait in-between showing pics on-screen after taking
 replay_cycles = 5 # how many times to show each photo on-screen after taking
 
 ####################
@@ -288,7 +288,7 @@ def start_photobooth():
 		print 'CMD: '+graphicsmagick
 	
 
-	display_pics(now, sm=True)
+	display_pics(now, sm=config.make_sm)
 	###############
 
 	########################### Begin Step 4 #################################
