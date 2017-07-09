@@ -266,14 +266,8 @@ def start_photobooth():
 
 	input(pygame.event.get()) # press escape to exit pygame. Then press ctrl-c to exit python.
 
-	show_image(real_path + "/processing.png")
-
-	if config.make_gifs: # make the gifs
-		if config.hi_res_pics:
-			# first make a small version of each image. Tumblr's max animated gif's are 500 pixels wide.
-			for x in range(1, total_pics+1): #batch process all the images
-				graphicsmagick = "gm convert -size 500x500 " + config.file_path + now + "-0" + str(x) + ".jpg -thumbnail 500x500 " + config.file_path + now + "-0" + str(x) + "-sm.jpg"
-				os.system(graphicsmagick) #do the graphicsmagick action
+	if config.make_sm: # make small images
+		print 'making small pics'
 
 		for x in range(1, config.total_pics+1): #batch process all the images
 			graphicsmagick = "gm convert -size 750x750 " + config.file_path + now + "-0" + str(x) + ".jpg -thumbnail 500x500 " + config.file_path + now + "-0" + str(x) + "-sm.jpg"
