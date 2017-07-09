@@ -264,28 +264,24 @@ def start_photobooth():
 
 	#input(pygame.event.get()) # press escape to exit pygame. Then press ctrl-c to exit python.
 
-	print "Creating an animated gif" 
+	if config.make_sm: # make small images
+		print 'making small pics'
 
-	show_image(real_path + "/processing.png")
+		for x in range(1, config.total_pics+1): #batch process all the images
+			graphicsmagick = "gm convert -size 750x750 " + config.file_path + now + "-0" + str(x) + ".jpg -thumbnail 500x500 " + config.file_path + now + "-0" + str(x) + "-sm.jpg"
+			os.system(graphicsmagick) #do the graphicsmagick action
+			print 'CMD: '+graphicsmagick
 
-	if config.make_gifs: # make the gifs
-		if config.hi_res_pics:
-			# first make a small version of each image. Tumblr's max animated gif's are 500 pixels wide.
-			for x in range(1, config.total_pics+1): #batch process all the images
-				graphicsmagick = "gm convert -size 500x500 " + config.file_path + now + "-0" + str(x) + ".jpg -thumbnail 500x500 " + config.file_path + now + "-0" + str(x) + "-sm.jpg"
-				os.system(graphicsmagick) #do the graphicsmagick action
 
-			graphicsmagick = "gm convert -delay " + str(gif_delay) + " " + config.file_path + now + "*-sm.jpg " + config.file_path + now + ".gif" 
-			os.system(graphicsmagick) #make the .gif
-		else:
-			# make an animated gif with the low resolution images
-			graphicsmagick = "gm convert -delay " + str(gif_delay) + " " + config.file_path + now + "*.jpg " + config.file_path + now + ".gif" 
-			os.system(graphicsmagick) #make the .gif
+	if config.make_gifs and config.make_sm: # make the gifs
+		print "Creating an animated gif"
+
+		graphicsmagick = "gm convert -delay " + str(gif_delay) + " " + config.file_path + now + "*-sm.jpg " + config.file_path + now + ".gif" 
+		os.system(graphicsmagick) #make the .gif
+		print 'CMD: '+graphicsmagick
 	
 
-	# SHOW THE GIF!
-	show_image(config.file_path + now + ".gif")
-	time.sleep(capture_delay) # pause in-between shots
+	display_pics(now, sm=config.make_sm)
 	###############
 
 	########################### Begin Step 4 #################################
