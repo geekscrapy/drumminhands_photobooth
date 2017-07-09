@@ -35,7 +35,7 @@ led_pin = 10 # LED
 #btn_pin = 7 # pin for the start button
 
 total_pics = 4 # number of pics to be taken
-capture_delay = 2 # delay between pics
+capture_delay = 3 # delay between pics
 prep_delay = 7 # number of seconds at step 1 as users prep to have photo taken
 gif_delay = 50 # How much time between frames in the animated gif
 restart_delay = 5 # how long to display finished message before beginning a new session
@@ -243,21 +243,9 @@ def start_photobooth():
 			show_image(real_path + "/processing.png")
 			filenames = cam.download_session()
 
-			print filenames
-
-
-			exit(0)
-
+			print 'Downloaded: ', filenames
 
 			myLED.off()
-			#GPIO.output(led_pin, False) #turn off the LED
-			#camera.stop_preview()
-			#show_image(real_path + "/pose" + str(i) + ".png")
-			#time.sleep(capture_delay) # pause in-between shots
-
-			#clear_screen()
-
-
 
 		finally:
 			pass
@@ -272,19 +260,18 @@ def start_photobooth():
 	show_image(real_path + "/processing.png")
 
 	if config.make_gifs: # make the gifs
-		if config.hi_res_pics:
-			# first make a small version of each image. Tumblr's max animated gif's are 500 pixels wide.
-			for x in range(1, total_pics+1): #batch process all the images
-				graphicsmagick = "gm convert -size 500x500 " + config.file_path + now + "-0" + str(x) + ".jpg -thumbnail 500x500 " + config.file_path + now + "-0" + str(x) + "-sm.jpg"
+
+			converted = ''
+
+			for f in filenames:
+				graphicsmagick = "gm convert -size 500x500 " + config.file_path + f + " -thumbnail 500x500 " + config.file_path + f + "-sm.jpg"
 				os.system(graphicsmagick) #do the graphicsmagick action
 
-			graphicsmagick = "gm convert -delay " + str(gif_delay) + " " + config.file_path + now + "*-sm.jpg " + config.file_path + now + ".gif" 
-			os.system(graphicsmagick) #make the .gif
-		else:
-			# make an animated gif with the low resolution images
-			graphicsmagick = "gm convert -delay " + str(gif_delay) + " " + config.file_path + now + "*.jpg " + config.file_path + now + ".gif" 
-			os.system(graphicsmagick) #make the .gif			
+				converted += config.file_path + f + "-sm.jpg "
 
+			graphicsmagick = "gm convert -delay " + str(gif_delay) + converted + ' ' + config.file_path + now + ".gif" 
+			os.system(graphicsmagick) #make the .gif
+	
 
 	# SHOW THE GIF!
 	show_image(config.file_path + now + ".gif")
@@ -295,13 +282,6 @@ def start_photobooth():
 
 	#input(pygame.event.get()) # press escape to exit pygame. Then press ctrl-c to exit python.
 
-	try:
-		display_pics(now)
-	except Exception, e:
-		tb = sys.exc_info()[2]
-		traceback.print_exception(e.__class__, e, tb)
-		pygame.quit()
-
 	print "Done"
 
 	show_image(real_path + "/finished2.png")
@@ -309,7 +289,6 @@ def start_photobooth():
 	time.sleep(restart_delay)
 	show_image(real_path + "/intro.png");
 	myLED.on()
-	#GPIO.output(led_pin,True) #turn on the LED
 
 ####################
 ### Main Program ###
