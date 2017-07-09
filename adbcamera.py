@@ -37,7 +37,7 @@ class camera(object):
 
 		i = 0
 		while not len(self.get_new()) > 0:
-			if i > 7:
+			if i > 6:
 				return
 			i += 1
 			print 'Waiting for save...'

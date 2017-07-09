@@ -241,7 +241,6 @@ def start_photobooth():
 				show_image(real_path + "/smile/"+rand_smile+".jpg")
 				cam.take()
 
-
 			show_image(real_path + "/processing.png")
 
 			filenames = cam.download_session()
