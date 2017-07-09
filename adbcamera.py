@@ -71,7 +71,7 @@ class camera(object):
 
 
 		# Then rename the first image to what we planned and use that! Ignore the others...!
-		ret = subprocess.call('mv '+config.file_path+new_files[0]+' '+config.file_path+filename, shell=True)
+		ret = subprocess.call('mv '+config.file_path+new_files[0]+' '+filename, shell=True)
 		if ret != 0:
 			return False
 
