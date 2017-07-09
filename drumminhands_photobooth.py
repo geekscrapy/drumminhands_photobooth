@@ -247,6 +247,9 @@ def start_photobooth():
 
 			filenames = cam.download_session()
 
+			# Go with what we have!!
+			total_pics = len(filenames)
+
 			# Move those files to expected filenames
 			i = 1
 			for f in filenames:
