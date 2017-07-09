@@ -16,6 +16,8 @@ class camera(object):
 		self.old_files = []
 		self.rebase_file_list()
 
+		self.session = []
+
 
 	def power_toggle(self):
 		print 'adb powering on'
@@ -46,7 +48,7 @@ class camera(object):
 		total_files = dir_list.splitlines()
 
 		for f in total_files:
-			if f not in self.old_files:
+			if f not in self.old_files and f not in self.session:
 				new_files.append(f)
 				print 'new photo: ', f
 
