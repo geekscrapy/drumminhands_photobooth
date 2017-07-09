@@ -176,10 +176,14 @@ def clear_screen():
 	pygame.display.flip()
 
 # display a group of images
-def display_pics(jpg_group):
+def display_pics(jpg_group, sm=False):
 	for i in range(0, replay_cycles): #show pics a few times
 		for i in range(1, total_pics+1): #show each pic
-			show_image(config.file_path + jpg_group + "-0" + str(i) + "-sm.jpg")
+			if sm:
+				show_image(config.file_path + jpg_group + "-0" + str(i) + "-sm.jpg")
+			else:
+				show_image(config.file_path + jpg_group + "-0" + str(i) + ".jpg")
+
 			time.sleep(replay_delay) # pause 
 
 # define the photo taking function for when the big button is pressed 
@@ -266,28 +270,24 @@ def start_photobooth():
 
 	show_image(real_path + "/processing.png")
 
-	if config.make_gifs: # make the gifs
+	if config.make_sm: # make small images
+		print 'making small pics'
 
-		print "Creating an animated gif" 
+		for x in range(1, total_pics+1): #batch process all the images
+			graphicsmagick = "gm convert -size 500x500 " + config.file_path + now + "-0" + str(x) + ".jpg -thumbnail 500x500 " + config.file_path + now + "-0" + str(x) + "-sm.jpg"
+			os.system(graphicsmagick) #do the graphicsmagick action
+			print 'CMD: '+graphicsmagick
 
-		if config.hi_res_pics:
-			# first make a small version of each image. Tumblr's max animated gif's are 500 pixels wide.
-			for x in range(1, total_pics+1): #batch process all the images
-				graphicsmagick = "gm convert -size 500x500 " + config.file_path + now + "-0" + str(x) + ".jpg -thumbnail 500x500 " + config.file_path + now + "-0" + str(x) + "-sm.jpg"
-				os.system(graphicsmagick) #do the graphicsmagick action
-				print 'CMD: '+graphicsmagick
+
+	if config.make_gifs and config.make_sm: # make the gifs
+		print "Creating an animated gif"
 
 			graphicsmagick = "gm convert -delay " + str(gif_delay) + " " + config.file_path + now + "*-sm.jpg " + config.file_path + now + ".gif" 
 			os.system(graphicsmagick) #make the .gif
 			print 'CMD: '+graphicsmagick
-
-		else:
-			# make an animated gif with the low resolution images
-			graphicsmagick = "gm convert -delay " + str(gif_delay) + " " + config.file_path + now + "*.jpg " + config.file_path + now + ".gif" 
-			os.system(graphicsmagick) #make the .gif
 	
 
-	display_pics(now)
+	display_pics(now, sm=True)
 	###############
 
 	########################### Begin Step 4 #################################
