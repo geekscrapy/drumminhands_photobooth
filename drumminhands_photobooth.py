@@ -34,7 +34,6 @@ from signal import alarm, signal, SIGALRM, SIGKILL
 led_pin = 10 # LED 
 #btn_pin = 7 # pin for the start button
 
-total_pics = 4 # number of pics to be taken
 capture_delay = 1 # delay between pics
 prep_delay = 7 # number of seconds at step 1 as users prep to have photo taken
 gif_delay = 50 # How much time between frames in the animated gif
@@ -178,7 +177,7 @@ def clear_screen():
 # display a group of images
 def display_pics(jpg_group, sm=False):
 	for i in range(0, replay_cycles): #show pics a few times
-		for i in range(1, total_pics+1): #show each pic
+		for i in range(1, config.total_pics+1): #show each pic
 			if sm:
 				show_image(config.file_path + jpg_group + "-0" + str(i) + "-sm.jpg")
 			else:
@@ -232,11 +231,11 @@ def start_photobooth():
 		try: # take the photos
 			myLED.on()
 
-			for s in list(reversed(range(1,total_pics+1))):
+			for s in list(reversed(range(1,config.total_pics+1))):
 				show_image(real_path + "/pose" + str(s) + ".png")
 				time.sleep(s*0.15)
 
-			for s in list(reversed(range(1,total_pics+1))):
+			for s in list(reversed(range(1,config.total_pics+1))):
 				# Show a random image to make people smile!
 				rand_smile = str(randint(1, config.smile_pics))
 				show_image(real_path + "/smile/"+rand_smile+".jpg")
@@ -248,7 +247,7 @@ def start_photobooth():
 			filenames = cam.download_session()
 
 			# Go with what we have!!
-			total_pics = len(filenames)
+			config.total_pics = len(filenames)
 
 			# Move those files to expected filenames
 			i = 1
@@ -275,7 +274,7 @@ def start_photobooth():
 	if config.make_sm: # make small images
 		print 'making small pics'
 
-		for x in range(1, total_pics+1): #batch process all the images
+		for x in range(1, config.total_pics+1): #batch process all the images
 			graphicsmagick = "gm convert -size 750x750 " + config.file_path + now + "-0" + str(x) + ".jpg -thumbnail 500x500 " + config.file_path + now + "-0" + str(x) + "-sm.jpg"
 			os.system(graphicsmagick) #do the graphicsmagick action
 			print 'CMD: '+graphicsmagick
