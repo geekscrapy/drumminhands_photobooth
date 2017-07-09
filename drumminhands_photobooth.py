@@ -56,7 +56,7 @@ transfrom_y = config.monitor_h # how high to scale the jpg when replaying
 offset_x = 0 # how far off to left corner to display photos
 offset_y = 0 # how far off to left corner to display photos
 replay_delay = 0.25 # how much to wait in-between showing pics on-screen after taking
-replay_cycles = 1 # how many times to show each photo on-screen after taking
+replay_cycles = 4 # how many times to show each photo on-screen after taking
 
 ####################
 ### Other Config ###
@@ -274,7 +274,7 @@ def start_photobooth():
 		print 'making small pics'
 
 		for x in range(1, total_pics+1): #batch process all the images
-			graphicsmagick = "gm convert -size 500x500 " + config.file_path + now + "-0" + str(x) + ".jpg -thumbnail 500x500 " + config.file_path + now + "-0" + str(x) + "-sm.jpg"
+			graphicsmagick = "gm convert -size 750x750 " + config.file_path + now + "-0" + str(x) + ".jpg -thumbnail 500x500 " + config.file_path + now + "-0" + str(x) + "-sm.jpg"
 			os.system(graphicsmagick) #do the graphicsmagick action
 			print 'CMD: '+graphicsmagick
 
