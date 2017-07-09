@@ -5,5 +5,4 @@ sudo rm /tmp/5037
 sudo adb start-server
 sudo chmod 777 /tmp/5037
 
-cd drumminhands_photobooth
-sudo python drumminhands_photobooth.py
+python drumminhands_photobooth.py
