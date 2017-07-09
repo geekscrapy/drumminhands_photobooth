@@ -6,7 +6,7 @@ clear_on_startup = False # True will clear previously stored photos as the progr
 debounce = 0.1 # how long to debounce the button. Add more time if the button triggers too many times.
 post_online = False # True to upload images. False to store locally only.
 capture_count_pics = True # if true, show a photo count between taking photos. If false, do not. False is faster.
-make_gifs = True   # True to make an animated gif. False to post 4 jpgs into one post.
+make_gifs = False   # True to make an animated gif. False to post 4 jpgs into one post.
 hi_res_pics = True  # True to save high res pics from camera.
                     # If also uploading, the program will also convert each image to a smaller image before making the gif.
                     # False to first capture low res pics. False is faster.
@@ -14,3 +14,7 @@ hi_res_pics = True  # True to save high res pics from camera.
 camera_iso = 800    # adjust for lighting issues. Normal is 100 or 200. Sort of dark is 400. Dark is 800 max.
                     # available options: 100, 200, 320, 400, 500, 640, 800
 smile_pics = 11		# Pictures to make you smile!
+
+
+make_sm = True   # True to make an animated gif. False to post 4 jpgs into one post.
+total_pics = 4		# number of pics to be taken

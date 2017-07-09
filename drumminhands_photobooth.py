@@ -34,7 +34,6 @@ from signal import alarm, signal, SIGALRM, SIGKILL
 led_pin = 10 # LED 
 #btn_pin = 7 # pin for the start button
 
-total_pics = 4 # number of pics to be taken
 capture_delay = 3 # delay between pics
 prep_delay = 7 # number of seconds at step 1 as users prep to have photo taken
 gif_delay = 50 # How much time between frames in the animated gif
@@ -176,11 +175,16 @@ def clear_screen():
 	pygame.display.flip()
 
 # display a group of images
-def display_pics(jpg_group):
+def display_pics(jpg_group, sm=False):
 	for i in range(0, replay_cycles): #show pics a few times
-		for i in range(1, total_pics+1): #show each pic
-			show_image(config.file_path + jpg_group + "-0" + str(i) + ".jpg")
+		for i in range(1, config.total_pics+1): #show each pic
+			if sm:
+				show_image(config.file_path + jpg_group + "-0" + str(i) + "-sm.jpg")
+			else:
+				show_image(config.file_path + jpg_group + "-0" + str(i) + ".jpg")
+
 			time.sleep(replay_delay) # pause 
+
 
 # define the photo taking function for when the big button is pressed 
 def start_photobooth(): 
@@ -225,38 +229,35 @@ def start_photobooth():
 	now = time.strftime("%Y-%m-%d-%H-%M-%S") #get the current date and time for the start of the filename
 
 	if config.capture_count_pics:
-		try: # take the photos
-			time.sleep(2) #warm up camera
-			myLED.on()
+		time.sleep(2) #warm up camera
+		myLED.on()
 
-			for s in list(reversed(range(1,total_pics+1))):
-				show_image(real_path + "/pose" + str(s) + ".png")
-				time.sleep(s*0.15)
+		for s in list(reversed(range(1,config.total_pics+1))):
+			show_image(real_path + "/pose" + str(s) + ".png")
+			time.sleep(s*0.15)
 
-			for s in list(reversed(range(1,total_pics+1))):
-				# Show a random image to make people smile!
-				rand_smile = str(randint(1, config.smile_pics))
-				show_image(real_path + "/smile/"+rand_smile+".jpg")
-				cam.take()
-
-
-			show_image(real_path + "/processing.png")
-			filenames = cam.download_session()
-
-			# Move those files to expected filenames
-			i = 0
-			for f in filenames:
-				call('mv '+config.file_path+f+' '+config.file_path+now+"-0"+str(i)+'.jpg', shell=True)
-				print 'CMD: mv '+config.file_path+f+' '+config.file_path+now+"-0"+str(i)+'.jpg'
-				i += 1
+		for s in list(reversed(range(1,config.total_pics+1))):
+			# Show a random image to make people smile!
+			rand_smile = str(randint(1, config.smile_pics))
+			show_image(real_path + "/smile/"+rand_smile+".jpg")
+			cam.take()
 
 
-			print 'Downloaded this session: ', filenames
+		show_image(real_path + "/processing.png")
+		filenames = cam.download_session()
 
-			myLED.off()
+		# Move those files to expected filenames
+		i = 1
+		for f in filenames:
+			call('mv '+config.file_path+f+' '+config.file_path+now+"-0"+str(i)+'.jpg', shell=True)
+			print 'CMD: mv '+config.file_path+f+' '+config.file_path+now+"-0"+str(i)+'.jpg'
+			i += 1
 
-		finally:
-			pass
+
+		print 'Downloaded this session: ', filenames
+
+		myLED.off()
+
 
 
 	########################### Begin Step 3 #################################
@@ -270,7 +271,7 @@ def start_photobooth():
 	if config.make_gifs: # make the gifs
 		if config.hi_res_pics:
 			# first make a small version of each image. Tumblr's max animated gif's are 500 pixels wide.
-			for x in range(1, total_pics+1): #batch process all the images
+			for x in range(1, config.total_pics+1): #batch process all the images
 				graphicsmagick = "gm convert -size 500x500 " + config.file_path + now + "-0" + str(x) + ".jpg -thumbnail 500x500 " + config.file_path + now + "-0" + str(x) + "-sm.jpg"
 				os.system(graphicsmagick) #do the graphicsmagick action
 
