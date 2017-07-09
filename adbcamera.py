@@ -12,6 +12,15 @@ class camera(object):
 		# Keep a list of pics we've taken
 		self.pics = []
 
+		# Get the starting list of files
+		self.old_files = []
+		dir_list = subprocess.check_output('adb shell ls /sdcard/DCIM/Camera/', shell=True)
+		for f in dir_list.split('\n'):
+			self.old_files.append(f)
+
+		# Total list of files created by this camera object
+		self.session_files = []
+
 
 	def power_toggle(self):
 		ret = subprocess.call('adb shell "input keyevent KEYCODE_POWER"', shell=True)
@@ -21,25 +30,35 @@ class camera(object):
 	def take(self):
 		return subprocess.call('adb shell "input keyevent KEYCODE_CAMERA"', shell=True)
 
+	# Get the latest file
+	def get_latest(self):
+
+		new_files = []
+
+		dir_list = subprocess.check_output('adb shell ls /sdcard/DCIM/Camera/', shell=True)
+
+		for f in dir_list.split('\n'):
+			if f not in self.old_files:
+				new_files.append(f)
+				self.session_files.append(f)
+
+		return new_files
+
+
 	def get_pic(self, filename):
 
 		# Get the filename of the latest picture
-		cmd = '"cd /sdcard/DCIM/Camera/; IFS=$\'\n\'; output=(`ls -l`); lines=${#output[@]}; IFS=$\' \'; file_line=(${output[$((lines-1))]}); file_name=(); index=0; for part in ${file_line[@]}; do if [[ $index -gt 4 ]]; then file_name+=($part); fi; index=$((index+1)); done; echo ${file_name[1]}"'
-		cap_name = subprocess.check_output(['adb', 'shell', cmd], shell=True)
-
-		if cap_name.upper().find('JPG') != -1:
-			return False
+		new_file = self.get_latest()
 
 		# Then copy it from the camera
-		ret = subprocess.call('adb pull /sdcard/DCIM/Camera/'+cap_name+' '+config.file_path, shell=True)
-
+		ret = subprocess.call('adb pull /sdcard/DCIM/Camera/'+new_file+' '+config.file_path, shell=True)
 		if ret != 0:
 			return False
 
 		# Then rename it to what we planned!
-		ret = subprocess.call('mv '+config.file_path+cap_name+' '+config.file_path+filename, shell=True)
+		ret = subprocess.call('mv '+config.file_path+new_file+' '+config.file_path+filename, shell=True)
 		if ret != 0:
 			return False
 
-		self.pics.append(config.file_path+filename)
 		return True
+
