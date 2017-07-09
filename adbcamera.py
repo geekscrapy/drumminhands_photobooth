@@ -64,11 +64,11 @@ class camera(object):
 			print 'Copied: ', f
 
 
-		# Then rename the first image to what we planned and use that!
-		ret = subprocess.call('mv '+config.file_path+new_file[0]+' '+config.file_path+filename, shell=True)
+		# Then rename the first image to what we planned and use that! Ignore the others...!
+		ret = subprocess.call('mv '+config.file_path+new_files[0]+' '+config.file_path+filename, shell=True)
 		if ret != 0:
 			return False
 
-		print 'Moved:', config.file_path+new_file[0], ', to: ', config.file_path+filename
+		print 'Moved:', config.file_path+new_files[0], ', to: ', config.file_path+filename
 		return True
 

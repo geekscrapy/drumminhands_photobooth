@@ -190,16 +190,16 @@ def start_photobooth():
 	################################# Begin Step 1 #################################
 
 	print "Get Ready"
+
+	cam = camera()
+	cam.power_toggle()
+
 	myLED.off()
 	#GPIO.output(led_pin,False);
 	#show_image(real_path + "/instructions.png")
 	show_image(real_path + "/instructions.png")
 	sleep(prep_delay)
 	
-
-	cam = camera()
-	cam.power_toggle()
-
 
 
 	#camera = picamera.PiCamera()
