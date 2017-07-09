@@ -273,8 +273,6 @@ def start_photobooth():
 
 	input(pygame.event.get()) # press escape to exit pygame. Then press ctrl-c to exit python.
 
-	show_image(real_path + "/processing.png")
-
 	if config.make_sm: # make small images
 		print 'making small pics'
 
