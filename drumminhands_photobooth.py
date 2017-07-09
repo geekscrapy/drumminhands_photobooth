@@ -35,7 +35,7 @@ led_pin = 10 # LED
 #btn_pin = 7 # pin for the start button
 
 capture_delay = 1 # delay between pics
-prep_delay = 4 # number of seconds at step 1 as users prep to have photo taken
+prep_delay = 1 # number of seconds at step 1 as users prep to have photo taken
 gif_delay = 50 # How much time between frames in the animated gif
 restart_delay = 5 # how long to display finished message before beginning a new session
 test_server = 'www.google.com'
@@ -188,7 +188,7 @@ def display_pics(jpg_group, sm=False):
 # define the photo taking function for when the big button is pressed 
 def start_photobooth(): 
 
-	#input(pygame.event.get()) # press escape to exit pygame. Then press ctrl-c to exit python.
+	input(pygame.event.get()) # press escape to exit pygame. Then press ctrl-c to exit python.
 
 	################################# Begin Step 1 #################################
 
@@ -197,7 +197,10 @@ def start_photobooth():
 	show_image(real_path + "/instructions.png")
 
 	cam = camera()
+	time.sleep(2)
 	cam.power_toggle()
+	time.sleep(2)
+	cam.pic_mode()
 
 	myLED.off()
 	time.sleep(prep_delay)
@@ -267,7 +270,7 @@ def start_photobooth():
 
 	########################### Begin Step 3 #################################
 
-	#input(pygame.event.get()) # press escape to exit pygame. Then press ctrl-c to exit python.
+	input(pygame.event.get()) # press escape to exit pygame. Then press ctrl-c to exit python.
 
 	show_image(real_path + "/processing.png")
 
@@ -293,7 +296,7 @@ def start_photobooth():
 
 	########################### Begin Step 4 #################################
 
-	#input(pygame.event.get()) # press escape to exit pygame. Then press ctrl-c to exit python.
+	input(pygame.event.get()) # press escape to exit pygame. Then press ctrl-c to exit python.
 
 	print "Done"
 
@@ -329,11 +332,10 @@ print 'Image shown...'
 while True:
 	myLED.on()
 	#GPIO.output(led_pin,True); #turn on the light showing users they can push the button
-	#input(pygame.event.get()) # press escape to exit pygame. Then press ctrl-c to exit python.
+	input(pygame.event.get()) # press escape to exit pygame. Then press ctrl-c to exit python.
 
 	mybutt.wait_for_press()
 
-	#GPIO.wait_for_edge(btn_pin, GPIO.FALLING)
 	time.sleep(config.debounce) #debounce
 
 	start_photobooth()

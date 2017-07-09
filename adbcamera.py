@@ -25,11 +25,13 @@ class camera(object):
 		if ret == 0:
 			self.status = not self.status
 
+	def pic_mode(self):
+		print 'adb open camera mode'
+		ret = subprocess.call('adb shell "am start -a android.media.action.STILL_IMAGE_CAMERA"', shell=True)
+
 
 	def take(self):
 		print 'adb taking photo'
-		ret = subprocess.call('adb shell "input keyevent KEYCODE_CAMERA"', shell=True)
-		time.sleep(0.50)
 		ret = subprocess.call('adb shell "input keyevent KEYCODE_CAMERA"', shell=True)
 		self.check_take()
 
