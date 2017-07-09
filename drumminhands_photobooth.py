@@ -282,9 +282,9 @@ def start_photobooth():
 	if config.make_gifs and config.make_sm: # make the gifs
 		print "Creating an animated gif"
 
-			graphicsmagick = "gm convert -delay " + str(gif_delay) + " " + config.file_path + now + "*-sm.jpg " + config.file_path + now + ".gif" 
-			os.system(graphicsmagick) #make the .gif
-			print 'CMD: '+graphicsmagick
+		graphicsmagick = "gm convert -delay " + str(gif_delay) + " " + config.file_path + now + "*-sm.jpg " + config.file_path + now + ".gif" 
+		os.system(graphicsmagick) #make the .gif
+		print 'CMD: '+graphicsmagick
 	
 
 	display_pics(now, sm=True)
