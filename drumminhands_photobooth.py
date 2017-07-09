@@ -258,8 +258,7 @@ def start_photobooth():
 
 			#clear_screen()
 
-			if i == total_pics+1:
-				break
+
 
 		finally:
 			pass
