@@ -55,8 +55,8 @@ transform_x = config.monitor_w # how wide to scale the jpg when replaying
 transfrom_y = config.monitor_h # how high to scale the jpg when replaying
 offset_x = 0 # how far off to left corner to display photos
 offset_y = 0 # how far off to left corner to display photos
-replay_delay = 1 # how much to wait in-between showing pics on-screen after taking
-replay_cycles = 2 # how many times to show each photo on-screen after taking
+replay_delay = 0.5 # how much to wait in-between showing pics on-screen after taking
+replay_cycles = 1 # how many times to show each photo on-screen after taking
 
 ####################
 ### Other Config ###
