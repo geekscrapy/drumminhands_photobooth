@@ -248,7 +248,9 @@ def start_photobooth():
 
 			print filenames
 
+
 			exit(0)
+
 
 			myLED.off()
 			#GPIO.output(led_pin, False) #turn off the LED

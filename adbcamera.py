@@ -14,14 +14,7 @@ class camera(object):
 
 		# Get the starting list of files
 		self.old_files = []
-		dir_list = subprocess.check_output('adb shell ls /sdcard/DCIM/Camera/', shell=True)
-		dir_list = dir_list.splitlines()
-
-		for f in dir_list:
-				self.old_files.append(f)
-
-		# Total list of files created by this camera object
-		self.session_files = []
+		rebase_file_list()
 
 
 	def power_toggle(self):
@@ -45,13 +38,20 @@ class camera(object):
 		total_files = dir_list.splitlines()
 
 		for f in total_files:
-			if f not in self.old_files and not in self.session_files:
+			if f not in self.old_files:
 				new_files.append(f)
-				self.session_files.append(f)
 				print 'new photo: ', f
 
 		return new_files
 
+	def rebase_file_list(self):
+		# Update oldfiles
+		self.old_files = []
+		dir_list = subprocess.check_output('adb shell ls /sdcard/DCIM/Camera/', shell=True)
+		dir_list = dir_list.splitlines()
+
+		for f in dir_list:
+			self.old_files.append(f)
 
 	def download_session(self):
 
@@ -68,6 +68,8 @@ class camera(object):
 				return False
 
 			print 'Copied: ', f
+
+		rebase_file_list()
 
 		return new_files
 
