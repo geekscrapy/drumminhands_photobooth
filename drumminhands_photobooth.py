@@ -237,11 +237,12 @@ def start_photobooth():
 
 			for s in list(reversed(range(1,config.total_pics+1))):
 				# Show a random image to make people smile!
-				show_image(real_path + "/pose" + str(s) + ".png")
-				time.sleep(2)
+				if s != 4:
+					show_image(real_path + "/pose" + str(s) + ".png")
+					time.sleep(2)
+
 				rand_smile = str(randint(1, config.smile_pics))
 				show_image(real_path + "/smile/"+rand_smile+".jpg")
-				time.sleep(3)
 				cam.take()
 
 
