@@ -241,12 +241,10 @@ def start_photobooth():
 				rand_smile = str(randint(1, config.smile_pics))
 				show_image(real_path + "/smile/"+rand_smile+".jpg")
 				cam.take()
-				time.sleep(3)
 
 
 			show_image(real_path + "/processing.png")
 
-			time.sleep(5)
 			filenames = cam.download_session()
 
 			# Move those files to expected filenames
