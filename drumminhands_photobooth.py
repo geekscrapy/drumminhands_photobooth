@@ -35,7 +35,7 @@ led_pin = 10 # LED
 #btn_pin = 7 # pin for the start button
 
 total_pics = 4 # number of pics to be taken
-capture_delay = 3 # delay between pics
+capture_delay = 1 # delay between pics
 prep_delay = 7 # number of seconds at step 1 as users prep to have photo taken
 gif_delay = 50 # How much time between frames in the animated gif
 restart_delay = 5 # how long to display finished message before beginning a new session
@@ -55,7 +55,7 @@ transform_x = config.monitor_w # how wide to scale the jpg when replaying
 transfrom_y = config.monitor_h # how high to scale the jpg when replaying
 offset_x = 0 # how far off to left corner to display photos
 offset_y = 0 # how far off to left corner to display photos
-replay_delay = 0.5 # how much to wait in-between showing pics on-screen after taking
+replay_delay = 0.25 # how much to wait in-between showing pics on-screen after taking
 replay_cycles = 1 # how many times to show each photo on-screen after taking
 
 ####################
@@ -229,7 +229,7 @@ def start_photobooth():
 			time.sleep(2) #warm up camera
 			myLED.on()
 
-			for s in list(reversed(range(1,total_pics+1))):
+			for s in list(reversed(range(1,3))):
 				show_image(real_path + "/pose" + str(s) + ".png")
 				time.sleep(s*0.15)
 
@@ -238,6 +238,7 @@ def start_photobooth():
 				rand_smile = str(randint(1, config.smile_pics))
 				show_image(real_path + "/smile/"+rand_smile+".jpg")
 				cam.take()
+				show_image(real_path + "/pose" + str(s) + ".png")
 
 
 			show_image(real_path + "/processing.png")
@@ -262,11 +263,12 @@ def start_photobooth():
 
 	#input(pygame.event.get()) # press escape to exit pygame. Then press ctrl-c to exit python.
 
-	print "Creating an animated gif" 
-
 	show_image(real_path + "/processing.png")
 
 	if config.make_gifs: # make the gifs
+
+		print "Creating an animated gif" 
+
 		if config.hi_res_pics:
 			# first make a small version of each image. Tumblr's max animated gif's are 500 pixels wide.
 			for x in range(1, total_pics+1): #batch process all the images
@@ -285,7 +287,6 @@ def start_photobooth():
 	
 
 	display_pics(now)
-	time.sleep(capture_delay) # pause to show gif
 	###############
 
 	########################### Begin Step 4 #################################
@@ -332,6 +333,6 @@ while True:
 	mybutt.wait_for_press()
 
 	#GPIO.wait_for_edge(btn_pin, GPIO.FALLING)
-	#time.sleep(config.debounce) #debounce
+	time.sleep(config.debounce) #debounce
 
 	start_photobooth()
