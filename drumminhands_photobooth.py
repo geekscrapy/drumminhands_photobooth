@@ -225,52 +225,41 @@ def start_photobooth():
 
 	now = time.strftime("%Y-%m-%d-%H-%M-%S") #get the current date and time for the start of the filename
 
-	success = False
+	show_image(real_path + "/instructions.png")
 
 	if config.capture_count_pics:
 		try: # take the photos
-			for i in range(1,total_pics+1):
-				#camera.hflip = True # preview a mirror image
-				#camera.start_preview(resolution=(config.monitor_w, config.monitor_h)) # start preview at low res but the right ratio
-				time.sleep(2) #warm up camera
-				myLED.on()
-				#GPIO.output(led_pin,True) #turn on the LED
-				filename = config.file_path + now + '-0' + str(i) + '.jpg'
-				#camera.hflip = False # flip back when taking photo
-				#camera.capture(filename)
+			time.sleep(2) #warm up camera
+			myLED.on()
 
-				if i != 1:
-					show_image(real_path + "/instructions.png")
+			for s in list(reversed(range(1,total_pics+1))):
+				show_image(real_path + "/pose" + str(s) + ".png")
+				time.sleep(s*0.15)
 
-				time.sleep(capture_delay) # pause in-between shots
-
-				for s in list(reversed(range(1,total_pics+1))):
-					show_image(real_path + "/pose" + str(s) + ".png")
-					time.sleep(s*0.15)
-
+			for s in list(reversed(range(1,total_pics+1))):
 				# Show a random image to make people smile!
 				rand_smile = str(randint(1, config.smile_pics))
 				show_image(real_path + "/smile/"+rand_smile+".jpg")
-
-
 				cam.take()
-				show_image(real_path + "/processing.png")
-				time.sleep(5)
-				cam.download_pic(filename)
-				show_image(filename)
-				time.sleep(capture_delay) # pause in-between shots
 
-				print(filename)
-				myLED.off()
-				#GPIO.output(led_pin, False) #turn off the LED
-				#camera.stop_preview()
-				#show_image(real_path + "/pose" + str(i) + ".png")
-				#time.sleep(capture_delay) # pause in-between shots
 
-				#clear_screen()
+			show_image(real_path + "/processing.png")
+			filenames = cam.download_session()
 
-				if i == total_pics+1:
-					break
+			print filenames
+
+			exit(0)
+
+			myLED.off()
+			#GPIO.output(led_pin, False) #turn off the LED
+			#camera.stop_preview()
+			#show_image(real_path + "/pose" + str(i) + ".png")
+			#time.sleep(capture_delay) # pause in-between shots
+
+			#clear_screen()
+
+			if i == total_pics+1:
+				break
 
 		finally:
 			pass
