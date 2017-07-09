@@ -244,7 +244,7 @@ def start_photobooth():
 			filenames = cam.download_session()
 
 			# Move those files to expected filenames
-			i = 0
+			i = 1
 			for f in filenames:
 				call('mv '+config.file_path+f+' '+config.file_path+now+"-0"+str(i)+'.jpg', shell=True)
 				print 'CMD: mv '+config.file_path+f+' '+config.file_path+now+"-0"+str(i)+'.jpg'
@@ -273,9 +273,13 @@ def start_photobooth():
 			for x in range(1, total_pics+1): #batch process all the images
 				graphicsmagick = "gm convert -size 500x500 " + config.file_path + now + "-0" + str(x) + ".jpg -thumbnail 500x500 " + config.file_path + now + "-0" + str(x) + "-sm.jpg"
 				os.system(graphicsmagick) #do the graphicsmagick action
+				print 'CMD: '+graphicsmagick
+
 
 			graphicsmagick = "gm convert -delay " + str(gif_delay) + " " + config.file_path + now + "*-sm.jpg " + config.file_path + now + ".gif" 
 			os.system(graphicsmagick) #make the .gif
+			print 'CMD: '+graphicsmagick
+
 		else:
 			# make an animated gif with the low resolution images
 			graphicsmagick = "gm convert -delay " + str(gif_delay) + " " + config.file_path + now + "*.jpg " + config.file_path + now + ".gif" 
