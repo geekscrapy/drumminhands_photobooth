@@ -29,7 +29,7 @@ class camera(object):
 	def take(self):
 		print 'adb taking photo'
 		subprocess.call('adb shell "input keyevent KEYCODE_CAMERA"', shell=True)
-		self.check_take()
+		#self.check_take()
 
 
 	# Wait for the photo to be saved before moving on
@@ -65,6 +65,8 @@ class camera(object):
 			self.old_files.append(f)
 
 	def download_session(self):
+
+		self.session = self.get_new()
 
 		# Copy all the new files
 		for f in self.session:

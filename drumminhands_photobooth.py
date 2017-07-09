@@ -55,8 +55,8 @@ transform_x = config.monitor_w # how wide to scale the jpg when replaying
 transfrom_y = config.monitor_h # how high to scale the jpg when replaying
 offset_x = 0 # how far off to left corner to display photos
 offset_y = 0 # how far off to left corner to display photos
-replay_delay = 0.25 # how much to wait in-between showing pics on-screen after taking
-replay_cycles = 4 # how many times to show each photo on-screen after taking
+replay_delay = 0.50 # how much to wait in-between showing pics on-screen after taking
+replay_cycles = 5 # how many times to show each photo on-screen after taking
 
 ####################
 ### Other Config ###
@@ -233,7 +233,7 @@ def start_photobooth():
 			time.sleep(2) #warm up camera
 			myLED.on()
 
-			for s in list(reversed(range(1,3))):
+			for s in list(reversed(range(1,total_pics))):
 				show_image(real_path + "/pose" + str(s) + ".png")
 				time.sleep(s*0.15)
 
@@ -243,9 +243,12 @@ def start_photobooth():
 				show_image(real_path + "/smile/"+rand_smile+".jpg")
 				cam.take()
 				show_image(real_path + "/pose" + str(s) + ".png")
+				time.sleep(3)
 
 
 			show_image(real_path + "/processing.png")
+
+			
 			filenames = cam.download_session()
 
 			# Move those files to expected filenames
