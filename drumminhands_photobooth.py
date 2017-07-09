@@ -243,7 +243,15 @@ def start_photobooth():
 			show_image(real_path + "/processing.png")
 			filenames = cam.download_session()
 
-			print 'Downloaded: ', filenames
+			# Move those files to expected filenames
+			i = 0
+			for f in filenames:
+				call('mv '+config.file_path+f+' '+config.file_path+now+"-0"+str(i)+'.jpg', shell=True)
+				print 'CMD: mv '+config.file_path+f+' '+config.file_path+now+"-0"+str(i)+'.jpg'
+				i += 1
+
+
+			print 'Downloaded this session: ', filenames
 
 			myLED.off()
 
@@ -260,16 +268,17 @@ def start_photobooth():
 	show_image(real_path + "/processing.png")
 
 	if config.make_gifs: # make the gifs
-
-			converted = ''
-
-			for f in filenames:
-				graphicsmagick = "gm convert -size 500x500 " + config.file_path + f + " -thumbnail 500x500 " + config.file_path + f + "-sm.jpg"
+		if config.hi_res_pics:
+			# first make a small version of each image. Tumblr's max animated gif's are 500 pixels wide.
+			for x in range(1, total_pics+1): #batch process all the images
+				graphicsmagick = "gm convert -size 500x500 " + config.file_path + now + "-0" + str(x) + ".jpg -thumbnail 500x500 " + config.file_path + now + "-0" + str(x) + "-sm.jpg"
 				os.system(graphicsmagick) #do the graphicsmagick action
 
-				converted += config.file_path + f + "-sm.jpg "
-
-			graphicsmagick = "gm convert -delay " + str(gif_delay) + converted + ' ' + config.file_path + now + ".gif" 
+			graphicsmagick = "gm convert -delay " + str(gif_delay) + " " + config.file_path + now + "*-sm.jpg " + config.file_path + now + ".gif" 
+			os.system(graphicsmagick) #make the .gif
+		else:
+			# make an animated gif with the low resolution images
+			graphicsmagick = "gm convert -delay " + str(gif_delay) + " " + config.file_path + now + "*.jpg " + config.file_path + now + ".gif" 
 			os.system(graphicsmagick) #make the .gif
 	
 
@@ -289,6 +298,9 @@ def start_photobooth():
 	time.sleep(restart_delay)
 	show_image(real_path + "/intro.png");
 	myLED.on()
+
+	cam.power_toggle()
+
 
 ####################
 ### Main Program ###

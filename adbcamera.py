@@ -75,8 +75,6 @@ class camera(object):
 			if ret != 0:
 				return False
 
-			print 'Copied: ', f
-
 		downloaded_files = self.session
 
 		self.rebase_file_list()
