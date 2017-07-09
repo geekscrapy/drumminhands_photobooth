@@ -28,7 +28,7 @@ class camera(object):
 
 	def take(self):
 		print 'adb taking photo'
-		subprocess.call('adb shell "input keyevent KEYCODE_CAMERA"', shell=True)
+		subprocess.call('adb shell "am start -a android.media.action.STILL_IMAGE_CAMERA"', shell=True)
 		self.check_take()
 
 
