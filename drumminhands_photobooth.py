@@ -35,7 +35,7 @@ led_pin = 10 # LED
 #btn_pin = 7 # pin for the start button
 
 capture_delay = 1 # delay between pics
-prep_delay = 1 # number of seconds at step 1 as users prep to have photo taken
+prep_delay = 4 # number of seconds at step 1 as users prep to have photo taken
 gif_delay = 50 # How much time between frames in the animated gif
 restart_delay = 5 # how long to display finished message before beginning a new session
 test_server = 'www.google.com'
@@ -197,10 +197,6 @@ def start_photobooth():
 	show_image(real_path + "/instructions.png")
 
 	cam = camera()
-	time.sleep(2)
-	cam.power_toggle()
-	time.sleep(2)
-	cam.pic_mode()
 
 	myLED.off()
 	time.sleep(prep_delay)
@@ -238,12 +234,16 @@ def start_photobooth():
 				show_image(real_path + "/pose" + str(s) + ".png")
 				time.sleep(s*0.15)
 
+
 			for s in list(reversed(range(1,config.total_pics+1))):
 				# Show a random image to make people smile!
+				show_image(real_path + "/pose" + str(s) + ".png")
+				time.sleep(2)
 				rand_smile = str(randint(1, config.smile_pics))
 				show_image(real_path + "/smile/"+rand_smile+".jpg")
-				time.sleep(1)
+				time.sleep(3)
 				cam.take()
+
 
 			show_image(real_path + "/processing.png")
 

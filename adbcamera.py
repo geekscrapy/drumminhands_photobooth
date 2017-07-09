@@ -25,20 +25,16 @@ class camera(object):
 		if ret == 0:
 			self.status = not self.status
 
-	def pic_mode(self):
-		print 'adb open camera mode'
-		ret = subprocess.call('adb shell "am start -a android.media.action.STILL_IMAGE_CAMERA"', shell=True)
-
 
 	def take(self):
 		print 'adb taking photo'
-		ret = subprocess.call('adb shell "input keyevent KEYCODE_CAMERA"', shell=True)
-		self.check_take()
+		subprocess.call('adb shell "input keyevent KEYCODE_CAMERA"', shell=True)
+		#self.check_take()
 
 
 	# Wait for the photo to be saved before moving on
 	def check_take(self):
-		time.sleep(0.75)
+		time.sleep(5)
 		i = 0
 		while not len(self.get_new()) > 0:
 			if i > 5:
