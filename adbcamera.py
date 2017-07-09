@@ -16,7 +16,8 @@ class camera(object):
 		self.old_files = []
 		dir_list = subprocess.check_output('adb shell ls /sdcard/DCIM/Camera/', shell=True)
 		for f in dir_list.splitlines():
-			self.old_files.append(f)
+			if not f == '':
+				self.old_files.append(f)
 
 		print 'Current files in dir', self.old_files # dbg
 
@@ -41,6 +42,7 @@ class camera(object):
 
 		dir_list = subprocess.check_output('adb shell ls /sdcard/DCIM/Camera/', shell=True)
 		total_files = dir_list.splitlines():
+		total_files.remove('')
 
 		print 'Found: ', total_files
 
