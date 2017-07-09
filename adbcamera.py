@@ -42,9 +42,9 @@ class camera(object):
 		dir_list = subprocess.check_output('adb shell ls /sdcard/DCIM/Camera/', shell=True)
 		total_files = dir_list.splitlines():
 
-		for f in total_files:
+		print 'Found: ', total_files
 
-			print 'Trying: ', f
+		for f in total_files:
 
 			if f not in self.old_files:
 				new_files.append(f)
@@ -58,6 +58,8 @@ class camera(object):
 
 		# Get the filename of the latest picture
 		new_files = self.get_latest()
+
+
 
 		# Copy all the new files
 		for f in new_files:
