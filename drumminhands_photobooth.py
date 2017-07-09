@@ -200,7 +200,7 @@ def start_photobooth():
 	cam.power_toggle()
 
 	myLED.off()
-	sleep(prep_delay)
+	time.sleep(prep_delay)
 	
 
 
@@ -239,6 +239,7 @@ def start_photobooth():
 				# Show a random image to make people smile!
 				rand_smile = str(randint(1, config.smile_pics))
 				show_image(real_path + "/smile/"+rand_smile+".jpg")
+				time.sleep(1)
 				cam.take()
 
 			show_image(real_path + "/processing.png")
