@@ -42,7 +42,7 @@ class camera(object):
 		dir_list = subprocess.check_output('adb shell ls /sdcard/DCIM/Camera/', shell=True)
 		total_files = dir_list.splitlines():
 
-		for f in total_files
+		for f in total_files:
 
 			print 'Trying: ', f
 
