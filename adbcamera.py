@@ -34,9 +34,13 @@ class camera(object):
 
 	# Wait for the photo to be saved before moving on
 	def check_take(self):
+		i = 0
 		while not len(self.get_new()) > 0:
+			if i > 5:
+				return
+			i += 1
 			print 'Waiting for save...'
-			time.sleep(0.5)
+			time.sleep(0.75)
 
 
 	# Get the latest file

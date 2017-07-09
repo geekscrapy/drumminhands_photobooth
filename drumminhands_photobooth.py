@@ -34,7 +34,6 @@ from signal import alarm, signal, SIGALRM, SIGKILL
 led_pin = 10 # LED 
 #btn_pin = 7 # pin for the start button
 
-total_pics = 4 # number of pics to be taken
 capture_delay = 3 # delay between pics
 prep_delay = 7 # number of seconds at step 1 as users prep to have photo taken
 gif_delay = 50 # How much time between frames in the animated gif
@@ -56,7 +55,7 @@ transfrom_y = config.monitor_h # how high to scale the jpg when replaying
 offset_x = 0 # how far off to left corner to display photos
 offset_y = 0 # how far off to left corner to display photos
 replay_delay = 1 # how much to wait in-between showing pics on-screen after taking
-replay_cycles = 2 # how many times to show each photo on-screen after taking
+replay_cycles = 3 # how many times to show each photo on-screen after taking
 
 ####################
 ### Other Config ###
@@ -176,10 +175,14 @@ def clear_screen():
 	pygame.display.flip()
 
 # display a group of images
-def display_pics(jpg_group):
+def display_pics(jpg_group, sm=False):
 	for i in range(0, replay_cycles): #show pics a few times
-		for i in range(1, total_pics+1): #show each pic
-			show_image(config.file_path + jpg_group + "-0" + str(i) + ".jpg")
+		for i in range(1, config.total_pics+1): #show each pic
+			if sm:
+				show_image(config.file_path + jpg_group + "-0" + str(i) + "-sm.jpg")
+			else:
+				show_image(config.file_path + jpg_group + "-0" + str(i) + ".jpg")
+
 			time.sleep(replay_delay) # pause 
 
 # define the photo taking function for when the big button is pressed 
@@ -197,7 +200,7 @@ def start_photobooth():
 	cam.power_toggle()
 
 	myLED.off()
-	sleep(prep_delay)
+	time.sleep(prep_delay)
 	
 
 
@@ -229,11 +232,11 @@ def start_photobooth():
 			time.sleep(2) #warm up camera
 			myLED.on()
 
-			for s in list(reversed(range(1,total_pics+1))):
+			for s in list(reversed(range(1,config.total_pics+1))):
 				show_image(real_path + "/pose" + str(s) + ".png")
 				time.sleep(s*0.15)
 
-			for s in list(reversed(range(1,total_pics+1))):
+			for s in list(reversed(range(1,config.total_pics+1))):
 				# Show a random image to make people smile!
 				rand_smile = str(randint(1, config.smile_pics))
 				show_image(real_path + "/smile/"+rand_smile+".jpg")
@@ -243,8 +246,11 @@ def start_photobooth():
 			show_image(real_path + "/processing.png")
 			filenames = cam.download_session()
 
+			# Go with what we have!!
+			config.total_pics = len(filenames)
+
 			# Move those files to expected filenames
-			i = 0
+			i = 1
 			for f in filenames:
 				call('mv '+config.file_path+f+' '+config.file_path+now+"-0"+str(i)+'.jpg', shell=True)
 				print 'CMD: mv '+config.file_path+f+' '+config.file_path+now+"-0"+str(i)+'.jpg'
@@ -263,29 +269,24 @@ def start_photobooth():
 
 	#input(pygame.event.get()) # press escape to exit pygame. Then press ctrl-c to exit python.
 
-	print "Creating an animated gif" 
+	if config.make_sm: # make small images
+		print 'making small pics'
 
-	show_image(real_path + "/processing.png")
+		for x in range(1, config.total_pics+1): #batch process all the images
+			graphicsmagick = "gm convert -size 750x750 " + config.file_path + now + "-0" + str(x) + ".jpg -thumbnail 500x500 " + config.file_path + now + "-0" + str(x) + "-sm.jpg"
+			os.system(graphicsmagick) #do the graphicsmagick action
+			print 'CMD: '+graphicsmagick
 
-	if config.make_gifs: # make the gifs
-		if config.hi_res_pics:
-			# first make a small version of each image. Tumblr's max animated gif's are 500 pixels wide.
-			for x in range(1, total_pics+1): #batch process all the images
-				graphicsmagick = "gm convert -size 500x500 " + config.file_path + now + "-0" + str(x) + ".jpg -thumbnail 500x500 " + config.file_path + now + "-0" + str(x) + "-sm.jpg"
-				os.system(graphicsmagick) #do the graphicsmagick action
 
-			graphicsmagick = "gm convert -delay " + str(gif_delay) + " " + config.file_path + now + "*-sm.jpg " + config.file_path + now + ".gif" 
-			os.system(graphicsmagick) #make the .gif
-		else:
-			# make an animated gif with the low resolution images
-			graphicsmagick = "gm convert -delay " + str(gif_delay) + " " + config.file_path + now + "*.jpg " + config.file_path + now + ".gif" 
-			os.system(graphicsmagick) #make the .gif
+	if config.make_gifs and config.make_sm: # make the gifs
+		print "Creating an animated gif"
+
+		graphicsmagick = "gm convert -delay " + str(gif_delay) + " " + config.file_path + now + "*-sm.jpg " + config.file_path + now + ".gif" 
+		os.system(graphicsmagick) #make the .gif
+		print 'CMD: '+graphicsmagick
 	
 
-	# SHOW THE GIF!
-	show_image(config.file_path + now + ".gif")
-	time.sleep(capture_delay) # pause in-between shots
-	###############
+	display_pics(now, sm=config.make_sm)
 
 	########################### Begin Step 4 #################################
 
@@ -326,11 +327,11 @@ print 'Image shown...'
 while True:
 	myLED.on()
 	#GPIO.output(led_pin,True); #turn on the light showing users they can push the button
-	#input(pygame.event.get()) # press escape to exit pygame. Then press ctrl-c to exit python.
+	input(pygame.event.get()) # press escape to exit pygame. Then press ctrl-c to exit python.
 
 	mybutt.wait_for_press()
 
 	#GPIO.wait_for_edge(btn_pin, GPIO.FALLING)
-	#time.sleep(config.debounce) #debounce
+	time.sleep(config.debounce) #debounce
 
 	start_photobooth()
