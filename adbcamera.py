@@ -29,6 +29,8 @@ class camera(object):
 	def take(self):
 		print 'adb taking photo'
 		ret = subprocess.call('adb shell "input keyevent KEYCODE_CAMERA"', shell=True)
+		time.sleep(0.50)
+		ret = subprocess.call('adb shell "input keyevent KEYCODE_CAMERA"', shell=True)
 		self.check_take()
 
 
