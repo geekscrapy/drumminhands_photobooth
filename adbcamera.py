@@ -50,6 +50,7 @@ class camera(object):
 		for f in total_files:
 			if f not in self.old_files and f not in self.session:
 				new_files.append(f)
+				self.session.append(f)
 				print 'new photo: ', f
 
 		return new_files
