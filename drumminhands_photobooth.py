@@ -230,7 +230,6 @@ def start_photobooth():
 
 	if config.capture_count_pics:
 		try: # take the photos
-			time.sleep(2) #warm up camera
 			myLED.on()
 
 			for s in list(reversed(range(1,total_pics))):
@@ -242,13 +241,12 @@ def start_photobooth():
 				rand_smile = str(randint(1, config.smile_pics))
 				show_image(real_path + "/smile/"+rand_smile+".jpg")
 				cam.take()
-				show_image(real_path + "/pose" + str(s) + ".png")
 				time.sleep(3)
 
 
 			show_image(real_path + "/processing.png")
 
-			
+			time.sleep(5)
 			filenames = cam.download_session()
 
 			# Move those files to expected filenames
