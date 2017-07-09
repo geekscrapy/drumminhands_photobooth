@@ -254,7 +254,7 @@ def start_photobooth():
 				print 'CMD: mv '+config.file_path+f+' '+config.file_path+now+"-0"+str(i)+'.jpg'
 				i += 1
 
-			print 'Downloaded this session: ', filenames
+			print 'Downloaded this session:', filenames
 
 			myLED.off()
 

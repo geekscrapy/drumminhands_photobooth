@@ -66,8 +66,6 @@ class camera(object):
 
 	def download_session(self):
 
-		self.session = self.get_new()
-
 		# Copy all the new files
 		for f in self.session:
 			# Then copy it from the camera
