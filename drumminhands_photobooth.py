@@ -191,13 +191,12 @@ def start_photobooth():
 
 	print "Get Ready"
 
+	show_image(real_path + "/instructions.png")
+
 	cam = camera()
 	cam.power_toggle()
 
 	myLED.off()
-	#GPIO.output(led_pin,False);
-	#show_image(real_path + "/instructions.png")
-	show_image(real_path + "/instructions.png")
 	sleep(prep_delay)
 	
 
@@ -224,8 +223,6 @@ def start_photobooth():
 	print "Taking pics"
 
 	now = time.strftime("%Y-%m-%d-%H-%M-%S") #get the current date and time for the start of the filename
-
-	show_image(real_path + "/instructions.png")
 
 	if config.capture_count_pics:
 		try: # take the photos
