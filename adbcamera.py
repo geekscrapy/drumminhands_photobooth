@@ -18,16 +18,20 @@ class camera(object):
 		for f in dir_list.split('\n'):
 			self.old_files.append(f)
 
+		print 'Current files in dir', self.old_files # dbg
+
 		# Total list of files created by this camera object
 		self.session_files = []
 
 
 	def power_toggle(self):
+		print 'adb powering on'
 		ret = subprocess.call('adb shell "input keyevent KEYCODE_POWER"', shell=True)
 		if ret == 0:
 			self.status = not self.status
 
 	def take(self):
+		print 'adb taking photo'
 		return subprocess.call('adb shell "input keyevent KEYCODE_CAMERA"', shell=True)
 
 	# Get the latest file
@@ -41,6 +45,7 @@ class camera(object):
 			if f not in self.old_files:
 				new_files.append(f)
 				self.session_files.append(f)
+				print 'new photo: ', f
 
 		return new_files
 
@@ -48,17 +53,22 @@ class camera(object):
 	def get_pic(self, filename):
 
 		# Get the filename of the latest picture
-		new_file = self.get_latest()
+		new_files = self.get_latest()
 
-		# Then copy it from the camera
-		ret = subprocess.call('adb pull /sdcard/DCIM/Camera/'+new_file+' '+config.file_path, shell=True)
+		# Copy all the new files
+		for f in new_files:
+			# Then copy it from the camera
+			ret = subprocess.call('adb pull /sdcard/DCIM/Camera/'+f+' '+config.file_path, shell=True)
+			if ret != 0:
+				return False
+			print 'Copied: ', f
+
+
+		# Then rename the first image to what we planned and use that!
+		ret = subprocess.call('mv '+config.file_path+new_file[0]+' '+config.file_path+filename, shell=True)
 		if ret != 0:
 			return False
 
-		# Then rename it to what we planned!
-		ret = subprocess.call('mv '+config.file_path+new_file+' '+config.file_path+filename, shell=True)
-		if ret != 0:
-			return False
-
+		print 'Moved:', config.file_path+new_file[0], ', to: ', config.file_path+filename
 		return True
 
