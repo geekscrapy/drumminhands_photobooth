@@ -34,8 +34,8 @@ from signal import alarm, signal, SIGALRM, SIGKILL
 led_pin = 10 # LED 
 #btn_pin = 7 # pin for the start button
 
-capture_delay = 1 # delay between pics
-prep_delay = 4 # number of seconds at step 1 as users prep to have photo taken
+capture_delay = 3 # delay between pics
+prep_delay = 7 # number of seconds at step 1 as users prep to have photo taken
 gif_delay = 50 # How much time between frames in the animated gif
 restart_delay = 5 # how long to display finished message before beginning a new session
 test_server = 'www.google.com'
@@ -185,6 +185,7 @@ def display_pics(jpg_group, sm=False):
 
 			time.sleep(replay_delay) # pause 
 
+
 # define the photo taking function for when the big button is pressed 
 def start_photobooth(): 
 
@@ -228,33 +229,25 @@ def start_photobooth():
 
 	if config.capture_count_pics:
 		try: # take the photos
+			time.sleep(2) #warm up camera
 			myLED.on()
 
-			for s in list(reversed(range(1,config.total_pics+1))):
+			for s in list(reversed(range(1,total_pics+1))):
 				show_image(real_path + "/pose" + str(s) + ".png")
 				time.sleep(s*0.15)
 
-
-			for s in list(reversed(range(1,config.total_pics+1))):
+			for s in list(reversed(range(1,total_pics+1))):
 				# Show a random image to make people smile!
-				if s != 4:
-					show_image(real_path + "/pose" + str(s) + ".png")
-					time.sleep(2)
-
 				rand_smile = str(randint(1, config.smile_pics))
 				show_image(real_path + "/smile/"+rand_smile+".jpg")
 				cam.take()
 
 
 			show_image(real_path + "/processing.png")
-
 			filenames = cam.download_session()
 
-			# Go with what we have!!
-			config.total_pics = len(filenames)
-
 			# Move those files to expected filenames
-			i = 1
+			i = 0
 			for f in filenames:
 				call('mv '+config.file_path+f+' '+config.file_path+now+"-0"+str(i)+'.jpg', shell=True)
 				print 'CMD: mv '+config.file_path+f+' '+config.file_path+now+"-0"+str(i)+'.jpg'
@@ -262,10 +255,10 @@ def start_photobooth():
 
 			print 'Downloaded this session:', filenames
 
+			print 'Downloaded this session: ', filenames
+
 			myLED.off()
 
-		finally:
-			pass
 
 	cam.power_toggle()
 
@@ -275,8 +268,12 @@ def start_photobooth():
 
 	show_image(real_path + "/processing.png")
 
-	if config.make_sm: # make small images
-		print 'making small pics'
+	if config.make_gifs: # make the gifs
+		if config.hi_res_pics:
+			# first make a small version of each image. Tumblr's max animated gif's are 500 pixels wide.
+			for x in range(1, total_pics+1): #batch process all the images
+				graphicsmagick = "gm convert -size 500x500 " + config.file_path + now + "-0" + str(x) + ".jpg -thumbnail 500x500 " + config.file_path + now + "-0" + str(x) + "-sm.jpg"
+				os.system(graphicsmagick) #do the graphicsmagick action
 
 		for x in range(1, config.total_pics+1): #batch process all the images
 			graphicsmagick = "gm convert -size 750x750 " + config.file_path + now + "-0" + str(x) + ".jpg -thumbnail 500x500 " + config.file_path + now + "-0" + str(x) + "-sm.jpg"
