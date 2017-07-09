@@ -14,7 +14,7 @@ class camera(object):
 
 		# Get the starting list of files
 		self.old_files = []
-		rebase_file_list()
+		self.rebase_file_list()
 
 
 	def power_toggle(self):
@@ -69,7 +69,7 @@ class camera(object):
 
 			print 'Copied: ', f
 
-		rebase_file_list()
+		self.rebase_file_list()
 
 		return new_files
 
