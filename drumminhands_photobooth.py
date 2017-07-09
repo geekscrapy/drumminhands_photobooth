@@ -232,7 +232,7 @@ def start_photobooth():
 		try: # take the photos
 			myLED.on()
 
-			for s in list(reversed(range(1,total_pics))):
+			for s in list(reversed(range(1,total_pics+1))):
 				show_image(real_path + "/pose" + str(s) + ".png")
 				time.sleep(s*0.15)
 
