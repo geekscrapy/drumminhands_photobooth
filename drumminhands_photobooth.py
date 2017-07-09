@@ -160,7 +160,7 @@ def show_image(image_path):
 
 	# load the image
 	img = pygame.image.load(image_path)
-	img = img.convert() 
+	img = img.convert()
 
 	# set pixel dimensions based on image
 	set_demensions(img.get_width(), img.get_height())
@@ -250,7 +250,6 @@ def start_photobooth():
 				print 'CMD: mv '+config.file_path+f+' '+config.file_path+now+"-0"+str(i)+'.jpg'
 				i += 1
 
-
 			print 'Downloaded this session: ', filenames
 
 			myLED.off()
@@ -275,7 +274,6 @@ def start_photobooth():
 				os.system(graphicsmagick) #do the graphicsmagick action
 				print 'CMD: '+graphicsmagick
 
-
 			graphicsmagick = "gm convert -delay " + str(gif_delay) + " " + config.file_path + now + "*-sm.jpg " + config.file_path + now + ".gif" 
 			os.system(graphicsmagick) #make the .gif
 			print 'CMD: '+graphicsmagick
@@ -286,9 +284,8 @@ def start_photobooth():
 			os.system(graphicsmagick) #make the .gif
 	
 
-	# SHOW THE GIF!
-	show_image(config.file_path + now + ".gif")
-	time.sleep(capture_delay) # pause in-between shots
+	display_pics(now)
+	time.sleep(capture_delay) # pause to show gif
 	###############
 
 	########################### Begin Step 4 #################################
