@@ -66,11 +66,8 @@ class camera(object):
 
 	def download_session(self):
 
-		# Get the filename of the latest picture
-		new_files = self.get_new()
-
 		# Copy all the new files
-		for f in new_files:
+		for f in self.session:
 			# Then copy it from the camera
 			ret = subprocess.call('adb pull /sdcard/DCIM/Camera/'+f+' '+config.file_path+f, shell=True)
 			print 'Downloaded:', '/sdcard/DCIM/Camera/'+f, ', to: ', config.file_path+f
@@ -80,9 +77,12 @@ class camera(object):
 
 			print 'Copied: ', f
 
-		self.rebase_file_list()
+		downloaded_files = self.session
 
-		return new_files
+		self.rebase_file_list()
+		self.session = []
+
+		return downloaded_files
 
 
 
