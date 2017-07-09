@@ -1,6 +1,6 @@
 # Camera control
 
-import subprocess
+import subprocess, time
 
 import config
 
@@ -27,6 +27,14 @@ class camera(object):
 	def take(self):
 		print 'adb taking photo'
 		subprocess.call('adb shell "input keyevent KEYCODE_CAMERA"', shell=True)
+		check_take()
+
+
+	# Wait for the photo to be saved before moving on
+	def check_take(self):
+		while not len(get_new()) > 0:
+			print 'Waiting for save...'
+			time.sleep(0.5)
 
 
 	# Get the latest file
