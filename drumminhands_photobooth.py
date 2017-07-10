@@ -225,7 +225,7 @@ def start_photobooth():
 
 	print "Taking pics"
 
-	total_pics = total_pics
+	total_pics = config.total_pics
 
 	now = time.strftime("%Y-%m-%d-%H-%M-%S") #get the current date and time for the start of the filename
 
