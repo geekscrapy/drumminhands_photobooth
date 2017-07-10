@@ -293,7 +293,7 @@ def start_photobooth():
 		print 'CMD: '+graphicsmagick
 	
 
-	display_pics(now, sm=config.make_sm, total_pics)
+	display_pics(now, sm=config.make_sm)
 	###############
 
 	########################### Begin Step 4 #################################
