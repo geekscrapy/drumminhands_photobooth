@@ -34,9 +34,13 @@ class camera(object):
 			self.status = not self.status
 
 
-	def take(self):
+	def take(self, long_wait):
 		print 'adb taking photo'
 		subprocess.call('adb shell "input keyevent KEYCODE_CAMERA"', shell=True)
+
+		if long_wait:
+			time.sleep(config.countdown)
+
 		self.check_take()
 
 
