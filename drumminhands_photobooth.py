@@ -201,7 +201,7 @@ def start_photobooth():
 
 	myLED.off()
 	time.sleep(prep_delay)
-	cam.power_toggle()
+	cam.cam_power()
 
 
 	#camera = picamera.PiCamera()

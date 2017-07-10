@@ -19,12 +19,17 @@ class camera(object):
 		self.session = []
 
 
-	def power_toggle(self):
-		print 'adb toggle power'
-		#ret = subprocess.call('adb shell "input keyevent KEYCODE_POWER"', shell=True)
+	def cam_power(self):
+		print 'adb toggle power with camera button'
 		ret = subprocess.call('adb shell "input keyevent KEYCODE_CAMERA"', shell=True)
 		time.sleep(2)
 		ret = subprocess.call('adb shell "input keyevent KEYCODE_CAMERA"', shell=True)
+		if ret == 0:
+			self.status = not self.status
+
+	def power_toggle(self):
+		print 'adb toggle power'
+		ret = subprocess.call('adb shell "input keyevent KEYCODE_POWER"', shell=True)
 		if ret == 0:
 			self.status = not self.status
 
@@ -37,9 +42,10 @@ class camera(object):
 
 	# Wait for the photo to be saved before moving on
 	def check_take(self):
+		time.sleep(4)
 		i = 0
 		while not len(self.get_new()) > 0:
-			if i > 10:
+			if i > 5:
 				return
 			i += 1
 			print 'Waiting for save...'
