@@ -33,6 +33,9 @@ real_path = os.path.dirname(os.path.realpath(__file__))
 print "Photo booth app running..." 
 
 while True:
+
+	print "Ready"
+
 	myLED.on()
 	#GPIO.output(led_pin,True); #turn on the light showing users they can push the button
 	mybutt.wait_for_press()
@@ -44,11 +47,9 @@ while True:
 	now = time.strftime("%Y-%m-%d-%H-%M-%S") #get the current date and time for the start of the filename
 
 	myLED.off()
-	cam.cam_power()
 
-	print "Taking pics"
-	for s in list(reversed(range(1,2))):
-			cam.take()
+	time.sleep(1)
+	cam.take(True)
 
 	myLED.on()
 	myLED.off()
@@ -70,6 +71,4 @@ while True:
 	myLED.off()
 
 	print "Done"
-
-	time.sleep(restart_delay)
 
