@@ -201,7 +201,7 @@ def start_photobooth():
 
 	myLED.off()
 	time.sleep(prep_delay)
-	
+	cam.power_toggle()
 
 
 	#camera = picamera.PiCamera()
@@ -229,20 +229,26 @@ def start_photobooth():
 
 	if config.capture_count_pics:
 
-		try:
+		time.sleep(2) #warm up camera
+		myLED.on()
 
-			time.sleep(2) #warm up camera
-			myLED.on()
+		for s in list(reversed(range(1,config.total_pics+1))):
+			show_image(real_path + "/pose" + str(s) + ".png")
+			time.sleep(s*0.15)
 
-			for s in list(reversed(range(1,config.total_pics+1))):
-				show_image(real_path + "/pose" + str(s) + ".png")
-				time.sleep(s*0.15)
+		for s in list(reversed(range(1,config.total_pics+1))):
+			# Show a random image to make people smile!
+			rand_smile = str(randint(1, config.smile_pics))
+			show_image(real_path + "/smile/"+rand_smile+".jpg")
+			cam.take()
+
 
 		show_image(real_path + "/processing.png")
 		filenames = cam.download_session()
 
-			config.total_pics = len(filenames)
-			# Go with what we have!!
+		# Go with what we have!!
+		config.total_pics = len(filenames)
+
 		# Move those files to expected filenames
 		i = 1
 		for f in filenames:
@@ -250,16 +256,8 @@ def start_photobooth():
 			print 'CMD: mv '+config.file_path+f+' '+config.file_path+now+"-0"+str(i)+'.jpg'
 			i += 1
 
-			# Move those files to expected filenames
-			i = 1
-			for f in filenames:
-				call('mv '+config.file_path+f+' '+config.file_path+now+"-0"+str(i)+'.jpg', shell=True)
-				print 'CMD: mv '+config.file_path+f+' '+config.file_path+now+"-0"+str(i)+'.jpg'
-				i += 1
-
 		print 'Downloaded this session: ', filenames
 		myLED.off()
-
 
 
 	cam.power_toggle()
