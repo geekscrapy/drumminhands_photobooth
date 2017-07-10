@@ -225,8 +225,6 @@ def start_photobooth():
 
 	print "Taking pics"
 
-	total_pics = config.total_pics
-
 	now = time.strftime("%Y-%m-%d-%H-%M-%S") #get the current date and time for the start of the filename
 
 	if config.capture_count_pics:
@@ -336,5 +334,7 @@ while True:
 	mybutt.wait_for_press()
 
 	time.sleep(config.debounce) #debounce
+
+	total_pics = config.total_pics
 
 	start_photobooth()
