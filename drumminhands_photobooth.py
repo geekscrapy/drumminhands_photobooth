@@ -176,6 +176,9 @@ def clear_screen():
 
 # display a group of images
 def display_pics(jpg_group, sm=False):
+
+	global total_pics
+
 	for i in range(0, replay_cycles): #show pics a few times
 		for i in range(1, total_pics+1): #show each pic
 			if sm:
@@ -194,6 +197,8 @@ def start_photobooth():
 	################################# Begin Step 1 #################################
 
 	print "Get Ready"
+
+	global total_pics
 
 	show_image(real_path + "/instructions.png")
 
@@ -288,7 +293,7 @@ def start_photobooth():
 		print 'CMD: '+graphicsmagick
 	
 
-	display_pics(now, sm=config.make_sm)
+	display_pics(now, sm=config.make_sm, total_pics)
 	###############
 
 	########################### Begin Step 4 #################################
