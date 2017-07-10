@@ -43,7 +43,6 @@ while True:
 	cam = camera()
 
 	myLED.off()
-	time.sleep(prep_delay)
 	cam.cam_power()
 
 	print "Taking pics"
