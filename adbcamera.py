@@ -52,7 +52,7 @@ class camera(object):
 				return
 			i += 1
 			print 'Waiting for save...'
-			time.sleep(0.75)
+			time.sleep(0.50)
 
 	# Get the latest file
 	def get_new(self):
