@@ -41,6 +41,7 @@ while True:
 	print "Get Ready"
 
 	cam = camera()
+	now = time.strftime("%Y-%m-%d-%H-%M-%S") #get the current date and time for the start of the filename
 
 	myLED.off()
 	cam.cam_power()
