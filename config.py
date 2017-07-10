@@ -15,6 +15,6 @@ camera_iso = 800    # adjust for lighting issues. Normal is 100 or 200. Sort of 
                     # available options: 100, 200, 320, 400, 500, 640, 800
 smile_pics = 11		# Pictures to make you smile!
 make_sm = True   # True to make an animated gif. False to post 4 jpgs into one post.
-total_pics = 3		# number of pics to be taken
+total_pics = 4		# number of pics to be taken
 
 countdown = 5		# The timer countdown set on the camera. Used in headless mode
