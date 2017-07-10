@@ -39,7 +39,7 @@ class camera(object):
 		subprocess.call('adb shell "input keyevent KEYCODE_CAMERA"', shell=True)
 
 		if long_wait:
-			time.sleep(config.countdown)
+			time.sleep(config.countdown+1)
 
 		self.check_take()
 
