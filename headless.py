@@ -31,7 +31,7 @@ restart_delay = 5 # how long to display finished message before beginning a new 
 real_path = os.path.dirname(os.path.realpath(__file__))
 
 print "Photo booth app running..."
-print "remember to put the camera in taking mode ready, and turn on the countdown timer to "+config.countdown
+print "remember to put the camera in taking mode ready, and turn on the countdown timer to "+str(config.countdown)
 
 while True:
 
