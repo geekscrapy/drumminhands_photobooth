@@ -42,7 +42,6 @@ class camera(object):
 
 	# Wait for the photo to be saved before moving on
 	def check_take(self):
-		time.sleep(4)
 		i = 0
 		while not len(self.get_new()) > 0:
 			if i > 5:

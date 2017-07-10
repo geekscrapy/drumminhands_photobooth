@@ -55,7 +55,7 @@ transfrom_y = config.monitor_h # how high to scale the jpg when replaying
 offset_x = 0 # how far off to left corner to display photos
 offset_y = 0 # how far off to left corner to display photos
 replay_delay = 0.25 # how much to wait in-between showing pics on-screen after taking
-replay_cycles = 5 # how many times to show each photo on-screen after taking
+replay_cycles = 4 # how many times to show each photo on-screen after taking
 
 ####################
 ### Other Config ###
@@ -238,6 +238,11 @@ def start_photobooth():
 
 		for s in list(reversed(range(1,config.total_pics+1))):
 			# Show a random image to make people smile!
+
+			if s != 4:
+				show_image(real_path + "/pose" + str(s) + ".png")
+				time.sleep(1)
+
 			rand_smile = str(randint(1, config.smile_pics))
 			show_image(real_path + "/smile/"+rand_smile+".jpg")
 			cam.take()
