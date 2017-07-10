@@ -30,7 +30,6 @@ restart_delay = 5 # how long to display finished message before beginning a new 
 
 real_path = os.path.dirname(os.path.realpath(__file__))
 
-
 print "Photo booth app running..." 
 
 while True:
@@ -48,7 +47,7 @@ while True:
 	cam.cam_power()
 
 	print "Taking pics"
-	for s in list(reversed(range(1,config.total_pics+1))):
+	for s in list(reversed(range(1,2))):
 			cam.take()
 
 	myLED.on()
@@ -70,7 +69,6 @@ while True:
 	print 'Downloaded this session: ', filenames
 	myLED.off()
 
-	cam.power_toggle()
 	print "Done"
 
 	time.sleep(restart_delay)
