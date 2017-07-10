@@ -21,7 +21,10 @@ class camera(object):
 
 	def power_toggle(self):
 		print 'adb toggle power'
-		ret = subprocess.call('adb shell "input keyevent KEYCODE_POWER"', shell=True)
+		#ret = subprocess.call('adb shell "input keyevent KEYCODE_POWER"', shell=True)
+		ret = subprocess.call('adb shell "input keyevent KEYCODE_CAMERA"', shell=True)
+		time.sleep(2)
+		ret = subprocess.call('adb shell "input keyevent KEYCODE_CAMERA"', shell=True)
 		if ret == 0:
 			self.status = not self.status
 
