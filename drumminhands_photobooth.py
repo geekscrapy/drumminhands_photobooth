@@ -228,36 +228,38 @@ def start_photobooth():
 	now = time.strftime("%Y-%m-%d-%H-%M-%S") #get the current date and time for the start of the filename
 
 	if config.capture_count_pics:
-		try: # take the photos
+
+		try:
+
 			time.sleep(2) #warm up camera
 			myLED.on()
 
-			for s in list(reversed(range(1,total_pics+1))):
+			for s in list(reversed(range(1,config.total_pics+1))):
 				show_image(real_path + "/pose" + str(s) + ".png")
 				time.sleep(s*0.15)
 
-			for s in list(reversed(range(1,total_pics+1))):
-				# Show a random image to make people smile!
-				rand_smile = str(randint(1, config.smile_pics))
-				show_image(real_path + "/smile/"+rand_smile+".jpg")
-				cam.take()
+		show_image(real_path + "/processing.png")
+		filenames = cam.download_session()
 
-
-			show_image(real_path + "/processing.png")
-			filenames = cam.download_session()
+			config.total_pics = len(filenames)
+			# Go with what we have!!
+		# Move those files to expected filenames
+		i = 1
+		for f in filenames:
+			call('mv '+config.file_path+f+' '+config.file_path+now+"-0"+str(i)+'.jpg', shell=True)
+			print 'CMD: mv '+config.file_path+f+' '+config.file_path+now+"-0"+str(i)+'.jpg'
+			i += 1
 
 			# Move those files to expected filenames
-			i = 0
+			i = 1
 			for f in filenames:
 				call('mv '+config.file_path+f+' '+config.file_path+now+"-0"+str(i)+'.jpg', shell=True)
 				print 'CMD: mv '+config.file_path+f+' '+config.file_path+now+"-0"+str(i)+'.jpg'
 				i += 1
 
-			print 'Downloaded this session:', filenames
+		print 'Downloaded this session: ', filenames
+		myLED.off()
 
-			print 'Downloaded this session: ', filenames
-
-			myLED.off()
 
 
 	cam.power_toggle()
