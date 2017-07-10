@@ -34,7 +34,7 @@ from signal import alarm, signal, SIGALRM, SIGKILL
 led_pin = 10 # LED 
 #btn_pin = 7 # pin for the start button
 
-prep_delay = 4 # number of seconds at step 1 as users prep to have photo taken
+prep_delay = 2 # number of seconds at step 1 as users prep to have photo taken
 capture_delay = 3 # delay between pics
 gif_delay = 50 # How much time between frames in the animated gif
 restart_delay = 5 # how long to display finished message before beginning a new session
